@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+{% include 'base/searchNav.html' %}
+
+<div class="container lines">
+    <h4>
+        Requested Modifications
+    </h4>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% include 'base/validationmessages.html' %}
+
+            {% csrf_token %}
+            <div class='form-row'>
+                <div class="form-group col-md-2">
+                    <!-- <label for="">Requester</label> -->
+                    {{form.Ast_Tag_nbr}}
+                </div>
+                
+            </div>
+            <div class='form-row'>
+            <div class="form-group col-md-2">
+                <label for="">User Comments</label>
+                {{form.disposalExplanation}}
+             </div>
+            <div class="form-group col-md-2">
+                <label for="">Fair Market Value</label>
+                {{form.fairMarketValue }}
+             </div>
+           
+             
+            <div class="form-group col-md-2">
+                <label for="">Purchasing Price (UGX)</label>
+                <input type ="text" readonly class="form-control"  value = {{ApprovalObject.Ast_Tag_nbr.Item_Cost_UGX |floatformat:2|intcomma}}>
+             </div>
+             <div class="form-group col-md-2">
+                <label for="">Date of Purchase</label>
+                {{ApprovalObject.Ast_Tag_nbr.PurchaseDate}}
+                <input type ="text" readonly class="form-control"  value = {{ApprovalObject.Ast_Tag_nbr.PurchaseDate}}>
+             </div><div class="form-group col-md-2">
+                <label for="">Aging (Years)</label>
+                <input type ="text" readonly class="form-control"  value = {{years}} >
+             </div>
+             <div class="form-group col-md-2">
+                <label for="">Approval Comments</label>
+                {{form.comments}}
+             </div>
+            </div>
+            <input type="submit" value="Approve" class="btn btn-default btn-primary">
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

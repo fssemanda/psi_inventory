@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="view-point" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://3.138.139.98/mystyle.css">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+
+
+
+    <title>Assets</title>
+</head>
+<body id="body-pd">
+
+<div class="l-navbar" id="navbar">
+    <nav class="nav">
+        <div>
+            <div class="nav__brand">
+                <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                <a href="#" class="nav__logo">PSI Asset Manager</a>
+            </div>
+            <div class="nav-list">
+                <a href="#" class="nav__link active">
+                    <ion-icon name="home-outline" class="nav__icon"></ion-icon>
+                    <span class="nav__name">Dashboard</span>
+                </a>
+                <div href="#" class="nav__link collapse">
+                    <ion-icon name="list-outline" class="nav__icon"></ion-icon>
+                    <span class="nav__name">Asset Listing</span>
+
+                    <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                    <ul class="collapse__menu">
+                        <a href="{% url 'view_assets' %}" class="collapse__sublink subActive">All Assets</a>
+                        <a href="#" class="collapse__sublink">Asset Assignment</a>
+                        <a href="#" class="collapse__sublink">Valuation reports</a>
+                    </ul>
+
+                </div>
+                <a href="#" class="nav__link">
+                    <ion-icon name="qr-code-outline" class="nav__icon"></ion-icon>
+                    <span class="nav__name">Code Generator</span>
+                </a>
+                <a href="#" class="nav__link">
+                    <ion-icon name="reader-outline" class="nav__icon"></ion-icon>
+                    <span class="nav__name">Recent Events</span>
+                </a>
+                <a href="#" class="nav__link">
+                    <ion-icon name="trash-outline" class="nav__icon"></ion-icon>
+                    <span class="nav__name">Asset Disposal</span>
+                </a>
+                <a href="#" class="nav__link">
+                    <ion-icon name="stats-chart-outline" class="nav__icon"></ion-icon>
+                    <span class="nav__name">Analytics</span>
+                </a>
+
+            </div>
+        </div>
+        <a href="#" class="nav__link">
+            <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
+            <span class="nav__name">Log Out</span>
+        </a>
+    </nav>
+</div>
+
+    {% block content %}
+
+    {% endblock %}
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://inventory.psiug.org/main.js"></script>
+<script src="http://3.138.139.98/main.js"></script>
+
+</body>
+</html>

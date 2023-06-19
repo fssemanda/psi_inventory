@@ -1,0 +1,108 @@
+{% extends "base.html"%}
+
+{%block content%}
+
+<br>
+
+
+<div class="row">
+    <div class="col">
+        <div class="col-md">
+            <div class="card text center text-black mb-3" >
+                <div class="card-header">
+                    <h5 class="card-title">Actions</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p><a class="btn btn-outline-info btn-md" href="{% url 'createrq' staffobj.Username %}">Create New Requistion</a></p>
+                    <p><a class="btn btn-outline-info btn-md" href="#">Update Requester Details</a></p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md">
+            <div class="card text center text-black mb-3" >
+                <div class="card-header">
+                    <h5 class="card-title">Username: {{staffobj.Username}}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-title"> Firsts Name: {{staffobj.Firstname}}</p>
+                    <p class="card-title"> Last Name: {{staffobj.Lastname}}</p>
+                    <p class="card-title"> Role: {{staffobj.staffrole}}</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="serviced">
+                <div class="card-header">
+                    <h5 class="card-title">Total Requisitions</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{rqs}}</h3>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<br>
+
+
+    <div class="original-table">
+        <table id="box" class="table table-hover table table-responsive table-sm">
+            <thead class="thead">
+                <tr>
+                    <th scope="row">Engraved Number</th>
+                    <th scope="row">Serial</th>
+                    <th scope="row">Model Number</th>
+
+                    <th scope="row">Location</th>
+                    <th scope="row">Type</th>
+                    <th scope="row">Condition</th>
+                    <th scope="row">Availability</th>
+                    <th scope="row">Purchase Date</th>
+                    <th scope="row">Cost (UGX)</th>
+                    <th scope="row">Cost (USD)</th>
+                    <th scope="row">Donor Project Code</th>
+                    <th scope="row">Donor Project</th>
+                    <th scope="row">Edit</th>
+                    <th scope="row">Delete</th>
+                </tr>
+            </thead>
+            {% for item in rqs %}
+                <tr >
+
+                    <td><a href="{% url 'assetdetails' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+                    <td>{{item.Ast_Tag_nbr.Serial_No}}</td>
+                    <td>{{item.Ast_Tag_nbr.Model_No}}</td>
+
+                    <td>{{item.Ast_Tag_nbr.Location}}</td>
+                    <td>{{item.Ast_Tag_nbr.Asset_Type}}</td>
+                    <td>{{item.Asset_Condition}}</td>
+                    <td>{{item.Availability}}</td>
+                    <td>{{item.PurchaseDate}}</td>
+                    <td>{{item.Item_Cost_UGX|floatformat:2|intcomma}}</td>
+                    <td>{{item.Item_Cost_USD|floatformat:2|intcomma}}</td>
+                    <td>{{item.Project}}</td>
+                    <td>{{item.Project_Name}}</td>
+                    <td><a class="btn-success btn-sm" href="#">Edit</a></td>
+                        <td><a class="btn-danger btn-sm" href="#">Delete</a></td>
+
+
+
+                </tr>
+                  {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

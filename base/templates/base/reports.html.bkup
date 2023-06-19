@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Asset Listing</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="col-md-1">
+                <a href="{% url 'export_pdf' %}" class="btn btn-secondary">
+                    <ion-icon name="download-outline"  class="nav__icon"></ion-icon>
+                    <span>PDF</span>
+                </a>
+            </div>
+
+            <div class="col-md-1">
+                    <a class="btn btn-secondary" href="{% url 'export_excel' %}" role="button">
+                        <ion-icon name="download-outline"  class="nav__icon"></ion-icon>
+                        <span>Excel  </span>
+                    </a>
+            </div>
+
+            <div class="col-md-1">
+                <a class="btn btn-secondary" href="{% url 'export_csv' %}" role="button">
+                    <ion-icon name="download-outline"  class="nav__icon"></ion-icon>
+                    <span>CSV</span>
+                </a>
+        </div>
+
+        </div>
+    </div>
+
+   <div class="card border-0">
+       <div class="card-body border-0">
+            <form method = "POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                      
+                            <label for="searchName">Asset Engravement Number</label>
+                            <input class="form-control" type="search" id="searchName" name="search_name" placeholder="Asset Engravement number"/>
+                        
+                    </div>
+                    <div class="form-group col-md-3">
+                        
+                            <!-- <label for="searchName">Asset Engravement Number</label> -->
+                            
+                            <label for="">Asset Type</label>
+                            <select class="form-control" name="Asset_Type" id='asset_type_id'>
+                              {% for item in myform.Asset_Type %}
+                                        {{item}}
+                                {% endfor %}
+                            </select>
+                        
+                        
+                    </div>  
+                    <div class="form-group col-md-3">
+                        
+                            
+                            <label for="Project_Name">Project Name</label>
+                         <select class="form-control" name="Project_Name" id='project_name_id' placeholder="Project">
+                            {% for item in myform.Project_Name %}
+                                {{item}}
+                            {% endfor %}
+                        </select>
+                            
+                        
+                        
+                    </div>  
+                    <div class="form-group col-md-3">
+                        
+                            <label for="">Condition</label>
+                         <select class="form-control" name="Asset_Condition" id='condition_id'>
+                            {% for item in myform.Asset_Condition %}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                        
+                    </div>
+                </div>
+                <div class="form-row">
+                
+                    <div class="form-group col-md-3">
+                        <label for="">Status</label>
+                         <select class="form-control " name="Asset_Status" id='asset_status'> 
+                            {% for item in myform.Asset_Status %}
+                            {{item}}
+                        {% endfor %}
+                        </select>
+                     </div>
+                   
+                    <div class="form-group col-md-3">
+                        <label for="">Availability</label>
+                         <select class="form-control " name="Availability" id='availability_id'>
+                            {% for item in myform.Availability%}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                    <div class="form-group col-md-3">
+                        <label for="">Location</label>
+                         <select class="form-control " name="Location" id='location_id'>
+                            {% for item in myform.Location %}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                   
+                    <div class="form-group col-md-3">
+                        <label for="">Supplier/Vendor</label>
+                        <input type="text" id="vendor_id" name="vendor" class="form-control"/>
+                     </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="mincost">Minimum unit cost</label>
+                        <div class="input-group">
+                            <input type="number" id="mincost" name="minimum_cost" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="maxcost">Maximum unit cost</label>
+                        <div class="input-group">
+                            <input type="number" id="maxcost" name="maximum_cost" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="fromdate">From</label>
+                        <div class="input-group">
+                            <input type="date" id="fromdate" name="from_date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="todate">To</label>
+                        <div class="input-group">
+                            <input type="date" id="todate" name="to_date" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="aging">Older than:</label>
+                        <div class="input-group">
+                            <input type="number" id="aging" name="age class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="submit" value="" class="btn btn-success btn-md" name="findme">
+                    <ion-icon name="search-outline"  class="nav__icon"></ion-icon>
+                    <span>
+                        Search
+                        </span>
+                    </button>
+
+                    <button type="submit" value="excel" class="btn btn-secondary btn-md" name="excel">
+                        <ion-icon name="download-outline"  class="nav__icon"></ion-icon>
+                        <span>
+                            Export to Excel
+                            </span>
+                        </button>
+           
+                        <button type="submit" value="pdf" class="btn btn-Danger btn-md" name="pdf">
+                            <ion-icon name="download-outline"  class="nav__icon"></ion-icon>
+                            <span>
+                                Export to PDF
+                                </span>
+                            </button>
+            
+                
+                <!-- <input type="submit" value="PDF" class="btn btn-success btn-md"> -->
+                
+            </form>
+        </div>
+   </div>
+
+   <div class="row">
+    
+        <div class="card card-body">
+             {% include 'base/validationmessages.html' %}
+        </div>
+       
+  
+   </div>
+
+   <div class="card border-0">
+       <div class="card-body">
+       
+        <div class="original-table">
+            <table id="box" class="table table-hover table table-responsive table-sm">
+                <thead class="thead">
+                    <tr>
+
+                        <th scope="row">Staff Name</th>
+                        <th scope="row">Location</th>
+                        
+                        <th scope="row">Engraved Number</th>
+                        <th scope="row">Asset Tag Number</th>
+                        <th scope="row">Serial</th>
+                        <th scope="row">Model Number</th>
+    
+                        
+                        <th scope="row">Type</th>
+                        <th scope="row">Condition</th>
+                        <th scope="row">Availability</th>
+                        <th scope="row">Status</th>
+                        <th scope="row">Purchase Date</th>
+                        <th scope="row">Cost (UGX)</th>
+                        <th scope="row">Cost (USD)</th>
+                        <th scope="row">Donor Project Code</th>
+                        <th scope="row">Donor Project</th>
+                        <!-- <th scope="row" rowspan="3">Actions</th> -->
+    <!--                    <th scope="row">Delete</th>-->
+                    </tr>
+                </thead>
+                {% for item in queryObj %}
+                    <tr >
+                        <td>{{item.assignment_set.get.Username}} {{item.Assignment.Username.Lastname}}</td>
+                        <!-- <td>{{item.assignment_set.get.Username}} {{item.Assignment.Username.Lastname}}</td> -->
+                        <td>{{item.Location}}</td>
+                        <td><a href="{% url 'assetdetails' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+                        <td>{{item.AstNo}}</td>
+                        <td>{{item.Serial_No}}</td>
+                        <td>{{item.Model_No}}</td>
+    
+                        
+                        <td>{{item.Asset_Type}}</td>
+                        <td>{{item.Asset_Condition}}</td>
+                        <td>{{item.Availability}}</td>
+                        <td>{{item.Asset_Status}}</td>
+                        <td>{{item.PurchaseDate}}</td>
+                        <td>{{item.Item_Cost_UGX|floatformat:2|intcomma}}</td>
+                        <td>{{item.Item_Cost_USD|floatformat:2|intcomma}}</td>
+                        <td>{{item.Project}}</td>
+                        <td>{{item.Project_Name}}</td>
+                        <!-- <td><a class="btn-success btn-sm" href="{% url 'edit_item' item.Ast_Tag_nbr %}">Edit</a></td>
+                        <td><a class="btn-success btn-sm" href="{% url 'assign' item.Ast_Tag_nbr %}">Assign</a></td>
+                            <td><a class="btn-danger btn-sm" href="{% url 'delete-item' item.Ast_Tag_nbr %}">Delete</a></td> -->
+    
+    
+    
+                    </tr>
+                      {% endfor %}
+            </table>
+        </div>
+       </div>
+   </div>
+    
+   <!-- <div class="row pagination-container" id="pagination">
+    <div class="col-md-10">
+        Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+    </div>
+    <div class="align-right float-right mr-auto">
+        <ul class="pagination align-right float-right mr-auto">
+    
+            {%  if page_obj.has_previous %}
+                <li {%  if page_obj.number == 1 %}  class="page-item active"  {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                <li class="page-item"><a class=page-link href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {%  if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{page_obj.paginator.num_pages}} &raquo;</a></li>
+            {% endif %}
+    
+            </ul>
+    </div>
+    </div> -->
+
+
+</div>
+
+
+
+{% endblock %}

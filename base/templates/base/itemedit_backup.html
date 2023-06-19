@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+{% include 'base/searchNav.html' %}
+    <div class="card">
+
+        <div class="card-body">
+            <form method="post">
+                {% include 'base/validationmessages.html' %}
+
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="">Asset Tag Number</label>
+                    <input type="text" class="form-control form-control-sm" name="Ast_Tag_nbr" value="{{values.Ast_Tag_nbr}}">
+                 </div>
+                <div class="form-group">
+                    <label for="">Serial Number</label>
+                    <input type="text" class="form-control form-control-sm" name="Serial_No" value="{{values.Serial_No}}">
+                 </div>
+                <div class="form-group">
+                    <label for="">Lawson Asset No</label>
+                    <input type="text" class="form-control form-control-sm" name="Lawson_Asset_No">
+                 </div>
+                <div class="form-group">
+                    <label for="">Description</label>
+                    <input type="text" class="form-control form-control-sm" name="Ast_description" value="{{values.Ast_Tag_nbr}}">
+                 </div>
+                <div class="form-group">
+                    <label for="">Asset Type</label>
+                    <select class="form-control form-control-sm" name="Asset_Type">
+                        <option selected name="values" value="{{Object.Asset_Type}}">{{Object.Asset_Type}}</option>
+                    {% for Object in Obj %}
+                        <option name="values" value="{{Object.Asset_Type}}">{{Object.Asset_Type}}</option>
+                    {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Model No</label>
+                    <input type="text" class="form-control form-control-sm" name="Model_No">
+                 </div>
+                <div class="form-group">
+                    <label for="">Project</label>
+
+                    <select class="form-control form-control-sm" name="Project">
+                        <option selected name="Project" value="{{values.Project}}">{{values.Project}}</option>
+                        {% for Object in Obj %}
+                        <option name="Project" value="{{Object.Project}}">{{Object.Project}}</option>
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Condition</label>
+                     <select class="form-control form-control-sm" name="Asset_Condition">
+                          <option selected name="Asset_Condition" value="{{values.Asset_Condition}}">{{values.Asset_Condition}} </option>
+                         {% for Object in Obj %}
+                        <option name="Asset_Condition" value="{{Object.Asset_Condition}}">{{Object.Asset_Condition}} </option>
+                          {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Status</label>
+                     <select class="form-control form-control-sm" name="Asset_Status">
+                          <option selected name="Asset_Status" value="{{values.Asset_Status}}">{{values.Asset_Status}}</option>
+                        {% for Object in Obj %}
+                         <option name="Asset_Status" value="{{Object.Asset_Status}}">{{Object.Asset_Status}}</option>
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Project Name</label>
+
+                     <select class="form-control form-control-sm" name="Project_Name">
+                          <option selected name="Project_Name" value="{{values.Project_Name}}">{{values.Project_Name}}</option>
+                        {% for Object in Obj %}
+                        <option name="Project_Name" value="{{Object.Project_Name}}">{{Object.Project_Name}}</option>
+                         {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Availability</label>
+                     <select class="form-control form-control-sm" name="Availability">
+                         <option selected name="Availability" value="{{values.Availability}}">{{values.Availability}}</option>
+                         {% for Object in Obj %}
+                        <option name="Availability" value="{{Object.Availability}}">{{Object.Availability}}</option>
+                          {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Location</label>
+                     <select class="form-control form-control-sm" name="Location">
+                         <option selected name="Location" value="{{values.Location}}">{{values.Location}}</option>
+                         {% for Object in Obj %}
+                        <option name="Location" value="{{Object.Location}}">{{Object.Location}}</option>
+                          {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Purchase Date</label>
+                    <input type="date" class="form-control form-control-sm" name="PurchaseDate" value="{{values.PurchaseDate}}">
+                 </div>
+                <div class="form-group">
+                    <label for="">Item_Cost_UGX</label>
+                    <input type="number" class="form-control form-control-sm" name="Item_Cost_UGX" value="{{values.Item_Cost_UGX}}">
+                </div>
+                <div class="form-group">
+                    <label for="">Item_Cost_USD </label>
+                    <input type="number" class="form-control form-control-sm" name="Item_Cost_USD" value="{{values.Item_Cost_USD}}">
+                </div>
+
+                <input type="submit" value="Save" class="btn btn-default btn-primary">
+
+            </form>
+
+        </div>
+
+
+    </div>
+{% endblock %}

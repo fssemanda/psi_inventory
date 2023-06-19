@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Asset Listing</li>
+          </ol>
+        </nav>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'add-asset' %}" class="btn btn-success">Add New</a> &nbsp <a class="btn btn-secondary" href="{% url 'Assignments' %}" role="button">Bulk Assign</a>
+    </div>
+</div>
+
+<div class="row">
+    <p>
+        <div class="card">
+            
+            {% include 'base/validationmessages.html' %}
+        </div>
+    </p>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+    <div class="card col-md-4">
+        <div class=" card-body col-md-4">
+            
+            <form method="POST">
+                {% csrf_token %}
+                                        {{myAssignmentForm}}
+    
+                    <div class="d-flex justify-content-center mt-3 login_container">
+                            <input class="btn btn-primary" type="submit" value="Assign Device">
+                    </div>
+                </form>
+
+        </div>
+        
+            
+        </div>
+       
+   
+    
+        
+            </div>
+           </div>
+    
+
+{% endblock %}

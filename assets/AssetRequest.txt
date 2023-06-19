@@ -1,0 +1,102 @@
+if request.method == 'POST':
+        
+        Ast_Tag_nbr = request.POST.get("Ast_Tag_nbr")
+        Reason = request.POST.get("Reason")
+
+        if AssetRequests.objects.filter(Ast_Tag_nbr=pk).exists:
+        
+            existingRequestObjects = AssetRequests.objects.filter(Ast_Tag_nbr=pk)
+
+            for item in existingRequestObjects:
+
+                if item.Username==request.user:
+                    messages.warning(request, f'You already have a request in the system for this Asset')
+                    return redirect('AssetRQ')
+                else:
+
+                    AssetRequests.objects.create(
+                        Assigned_Device = assetRqObj,
+                        Device_Type = assetRqObj.Asset_Type,
+                        #Status = ,
+                        Username = staffobj,
+                        Reason = Reason,
+                    )
+                    domain = get_current_site(request).domain
+                    # print(domain)
+
+                    link = reverse('homepage')
+                    print(link)
+                    full_link = 'http://'+domain+link
+
+                    print(full_link)
+                    messages.success(request, "Your Request for a pool device has been placed "\
+                                        "successfully. Wait for a confirmation Email to pick Equipment")
+                    Events.objects.create(
+
+                        EventType = "Asset Request",
+                        EventSummary = f"{datetime.datetime.now()} : Staff {request.user} is requesting for temporary assignment of {assetRqObj.Ast_Tag_nbr}"
+
+                        )
+
+                    Approvers = staff.objects.filter(staffrole='Accountant')|staff.objects.filter(staffrole='Admin')
+                    Emails = ['macho.francis2@gmail.com']
+                    for user in Approvers:
+                        Emails.append(user.email)
+
+                        print(Emails)
+
+                        email_subject = f'Request for Temporary Assignment of IT Pool Asset'
+                        email_body = f'Dear {user.Firstname},\n\n User {request.user} is requesting for temporary assignment of {assetRqObj.Ast_Tag_nbr}\n Click on Link below to access requests\n\n'+full_link
+
+                        email=EmailMessage(email_subject,email_body,'helpdesk@psiug.org',[user.email,])
+                        EmailThread(email).start()
+
+                        return redirect('AssetRQ')
+
+        else:
+
+
+            AssetRequests.objects.create(
+                Assigned_Device = assetRqObj,
+                Device_Type = assetRqObj.Asset_Type,
+                #Status = ,
+                Username = staffobj,
+                Reason = Reason,
+            )
+            domain = get_current_site(request).domain
+            # print(domain)
+
+            link = reverse('homepage')
+            print(link)
+            full_link = 'http://'+domain+link
+
+            print(full_link)
+            messages.success(request, "Your Request for a pool device has been placed "\
+                                "successfully. Wait for a confirmation Email to pick Equipment")
+            Events.objects.create(
+
+                EventType = "Asset Request",
+                EventSummary = f"{datetime.datetime.now()} : Staff {request.user} is requesting for temporary assignment of {assetRqObj.Ast_Tag_nbr}"
+
+                )
+
+            Approvers = staff.objects.filter(staffrole='Accountant')|staff.objects.filter(staffrole='Admin')
+            Emails = ['macho.francis2@gmail.com']
+            for user in Approvers:
+                Emails.append(user.email)
+
+                print(Emails)
+
+                email_subject = f'Request for Temporary Assignment of IT Pool Asset'
+                email_body = f'Dear {user.Firstname},\n\n User {request.user} is requesting for temporary assignment of {assetRqObj.Ast_Tag_nbr}\n Click on Link below to access requests\n\n'+full_link
+
+                email=EmailMessage(email_subject,email_body,'helpdesk@psiug.org',[user.email,])
+                EmailThread(email).start()
+
+                return redirect('AssetRQ')
+
+            
+
+            form = RqForm(request.POST)
+            if form.is_valid():
+                form.save()

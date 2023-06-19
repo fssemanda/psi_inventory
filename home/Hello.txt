@@ -1,0 +1,193 @@
+<div class="form-group">
+                    <label for="">Serial Number</label>
+                    <input type="text" class="form-control form-control-sm" name="Serial_No">
+                 </div>
+                <div class="form-group">
+                    <label for="">Lawson Asset No</label>
+                    <input type="text" class="form-control form-control-sm" name="Lawson_Asset_No">
+                 </div>
+                <div class="form-group">
+                    <label for="">Description</label>
+                    <input type="text" class="form-control form-control-sm" name="Ast_description">
+                 </div>
+                <div class="form-group">
+                    <label for="">Asset Type</label>
+                    <select class="form-control form-control-sm" name="Asset_Type">
+                        {% for Obj in AssetObj %}
+                        <option name="Obj" value="{{Obj.Asset_Type}}">{{Obj.Asset_Type}}</option>
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Model No</label>
+                    <input type="text" class="form-control form-control-sm" name="Model_No">
+                 </div>
+                <div class="form-group">
+                    <label for="">Project</label>
+                    <select class="form-control form-control-sm" name="Project">
+                        <option name="Project"></option>
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Condition</label>
+                     <select class="form-control form-control-sm" name="Asset_Condition">
+                        <option name=""></option>
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Status</label>
+                     <select class="form-control form-control-sm" name="Asset_Status">
+                         {% for Obj in AssetObj %}
+                         <option name="Asset_Status" value="{{Obj.Asset_Status}}">{{Obj.Asset_Status}}</option>
+                         {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Project Name</label>
+                     <select class="form-control form-control-sm" name="Project_Name">
+                         {% for Obj in AssetObj %}
+                        <option name="Project_Name" value="{{Obj.Project_Name}}">{{Obj.Project_Name}}</option>
+                         {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Availability</label>
+                     <select class="form-control form-control-sm" name="Availability">
+                        <option name="Availability"></option>
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Location</label>
+                     <select class="form-control form-control-sm" name="Location">
+                        <option name="Location"></option>
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Purchase Date</label>
+                    <input type="date" class="form-control form-control-sm" name="PurchaseDate">
+                 </div>
+                <div class="form-group">
+                    <label for="">Item_Cost_UGX</label>
+                    <input type="number" class="form-control form-control-sm" name="Item_Cost_UGX">
+                </div>
+                <div class="form-group">
+                    <label for="">Item_Cost_USD </label>
+                    <input type="number" class="form-control form-control-sm" name="Item_Cost_USD">
+                </div>
+
+
+                //CoDE form assets.views
+                @login_required(login_url='login')
+@allowed_users(allowed_roles=['Admin', 'Finance', 'IT'])
+def assign_asset(request, pk):
+
+
+    myAssignmentForm = AssignmentForm()
+
+    if request.method == "POST":
+        Username = request.POST.get('Username')
+        Asset_No = request.POST.get('Ast_Tag_nbr')
+
+
+
+        # Myobject = Assignment.objects.create(
+        #     Username = Username,
+        #     Ast_Tag_nbr = Asset_No
+        # )
+        # if Myobject:
+        #     Myobject.save()
+        # else:
+        #     print("Failed to Save to DB")
+        # try:
+        #     myAssignmentForm = AssignmentForm(request.POST)
+        #
+        #     myAssignmentForm.save()
+        #     return redirect('homepage')
+        # except Exception as e:
+        #     print(e)
+
+    context = {"myAssignmentForm": myAssignmentForm,}
+    return render(request, 'base/assign.html', context)
+
+
+def assign_device(request):
+
+    if request.method == "POST":
+        Username = request.POST.get('Username')
+        Asset_No = request.POST.get('Ast_Tag_nbr')
+
+        AssignObj = AssetTb.objects.get(Ast_Tag_nbr=Asset_No)
+
+        Assignment.objects.create(
+            id = 1,
+            Username = Username,
+            Ast_Tag_nbr = Asset_No
+        )
+
+
+
+    print(AssignObj.Ast_Tag_nbr)
+
+    Assignments = Assignment.objects.all()
+    #
+    #myAssignmentForm = AssignmentForm(instance=AssignObj)
+    #
+    ##   print(AssignObj)
+
+    # context = { "AssignObj":AssignObj}"Assignments":Assignments
+    context = {"myAssignmentForm": myAssignmentForm, "AssignObj": AssignObj, }
+    return render(request, 'base/assign_device.html', context)
+
+def assign_asset(request, pk):
+    newpk = pk.strip()
+    print(newpk)
+    AssignObj = AssetTb.objects.get(Ast_Tag_nbr=newpk)
+    Assigned_devices = Assignment.objects.all()
+
+    myAssignmentForm = AssignmentForm(instance=AssignObj)
+
+    #CurrentAssignment = AssignObj.objects.get(Ast_Tag_nbr=newpk)
+
+    if request.method == 'POST':
+        print("POST METHOD USED")
+        for row in Assigned_devices:
+            A = str(row.Ast_Tag_nbr)
+            #B = A.strip()
+            C = str(AssignObj.Ast_Tag_nbr)
+            #D = C.strip()
+
+            print(f'I am found as {row.Ast_Tag_nbr} ')
+
+            if A == C:
+                print(f'{row.Ast_Tag_nbr} is equal to {AssignObj.Ast_Tag_nbr} ')
+                print("Asset Already Assigned")
+                messages.error(request,f"Same Asset Can be Assigned Twice. Asset is currently assigned to {row.Username}")
+                break
+            else:
+                print("Asset is now being Assigned")
+                try:
+                    myAssignmentForm = AssignmentForm(request.POST)
+                    if myAssignmentForm.is_valid():
+                        myAssignmentForm.save()
+                except Exception as e:
+                    print(e)
+
+// Second try in look up
+    context = {"myAssignmentForm": myAssignmentForm, "AssignObj": AssignObj, }
+    return render(request, 'base/assign.html', context)
+
+    try:
+        myAssignmentForm = AssignmentForm(request.POST)
+        if myAssignmentForm.is_valid():
+            myAssignmentForm.save()
+        else:
+            try:
+                Assigned_devices = Assignment.objects.get(Ast_Tag_nbr=newpk)
+                messages.error(request,
+                           f"Asset Can be Assigned twice. Asset is currently assigned to {Assigned_devices.Username}")
+            except LookupError as e:
+                print(e)
+    except Exception as e:
+        messages.error(request,
+                       f"Asset Can be Assigned twice. Asset is currently assigned")
+        print(e)

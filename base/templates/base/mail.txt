@@ -1,0 +1,6 @@
+
+Click on link below to View Requests
+
+http://localhost:8000/approvals
+
+User {request.user} is requesting for temporary assignment of {assetRqObj.Ast_Tag_nbr}\n Click on Link below to access requests\n\n'+link2

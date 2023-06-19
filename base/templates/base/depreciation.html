@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{%block content %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <canvas class="canv" id="myChart" width="150" height="70"></canvas>
+        </div>
+        <button type="button" id="changebtn" class="btn btn-primary btn-md" onclick="Changethis()">Show as Table</button>
+
+    </div>
+    
+    
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="{% static 'js/depreciation.js' %}"></script>
+{% endblock scripts %}

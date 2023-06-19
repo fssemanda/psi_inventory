@@ -1,0 +1,19 @@
+
+<div class="container-fluid">
+<div class="row">
+
+
+	 <div class="card">
+         <div class="card card-body">
+		 <form method="POST" action="">
+			 <select>
+				 {% for item in items %}
+				 	<option name="{{item.Ast_Tag_nbr}}">{{item.Ast_Tag_nbr}}</option>
+				 {% endfor %}
+			 </select>
+		 </form>
+	 </div>
+
+ 	</div>
+</div>
+</div>

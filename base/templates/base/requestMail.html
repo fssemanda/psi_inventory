@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="view-point" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <style type="text/css">
+        .tg  {border-collapse:collapse;border-color:#aaa;border-spacing:0;border-style:solid;border-width:1px;}
+        .tg td{background-color:#fff;border-color:#aaa;border-style:solid;border-width:0px;color:#333;
+          font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{background-color:#f38630;border-color:#aaa;border-style:solid;border-width:0px;color:#fff;
+          font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-uzob{background-color:#ecf4ff;border-color:#ecf4ff;font-size:16px;text-align:left;vertical-align:top}
+        .tg .tg-nrcd{background-color:#26a69a;border-color:#ffffff;color:#ffffff;font-size:18px;font-weight:bold;text-align:left;
+          vertical-align:top}
+          .linkstyle {
+			color: #ffffff;
+			background-color: #62a79b;
+			font-size: 19px;
+            font-family:poppins;
+            font-size:18px;
+            font-weight:500;
+			border: 1px solid #2d63c8;
+			padding: 15px 50px;
+			cursor: pointer;
+            border-radius:5px;
+            margin-top:5px;
+            text-decoration:none;
+		}
+		.linkstyle :hover {
+			color: #2d63c8;
+			background-color: #ffffff;
+		}
+        </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-body">
+<h4 class="card-title">{{Fname}} {{Lname}} is requesting for asset below</h4>
+
+ 
+
+    <table class="tg">
+    <thead>
+      <tr>
+        <th class="tg-nrcd">Asset</th>
+        <th class="tg-nrcd">Asset Type</th>
+        <th class="tg-nrcd">Condition</th>
+        <th class="tg-nrcd">Availability</th>
+        <th class="tg-nrcd">Location</th>
+        <th class="tg-nrcd">Requested By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-uzob">{{Asset}}</td>
+        <td class="tg-uzob">{{Asset_Type}}</td>
+        <td class="tg-uzob">{{Condition}}</td>
+        <td class="tg-uzob">{{Availability}}</td>
+        <td class="tg-uzob">{{Location}}</td>
+        <td class="tg-uzob">{{Fname}} {{Lname}}</td>
+      </tr>
+    </tbody>
+    </table>
+
+    </div> 
+    <div>
+        <hr/>
+        <br/>
+   
+    <a href="{{link}}" class="linkstyle">Click here to action</a>
+    </div>
+    </div>
+</body>
+</html>
+

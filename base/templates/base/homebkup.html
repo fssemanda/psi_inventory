@@ -1,0 +1,168 @@
+<div class="col-sm-4 shadow-lg p-3 mb-5 bg-body rounded">
+    <h6 class="mt-3 mb-3 text-success">Notifications</h6>
+
+    <div class="card shadow-lg bg-body rounded">
+       
+        <div class="card-body">
+            
+                
+
+                
+        </div>
+
+    </div>
+    
+    <h6 class="mt-3 mb-3 text-success">Staff Asset Allocation</h6>
+
+    <div class="col-sm">
+        <div class="card border-0 mt-3 shadow-lg p-3 mb-5 bg-body rounded">
+            
+            <div class="card-body">
+        
+                <form method="post">
+                    {% csrf_token %}
+                    <div class=" form-group col-md-8">
+                        <div class="input-group">
+                            <input type="text" placeholder="Enter a Username" class="form-control form-control-md-4" name="uname" id="uname_id"/>
+                            <span class="input-group-btn">
+                                <button class="btn green-color" type="submit">Search</button>
+                            </span>
+                        </div>
+                    </div>
+                    
+                </form>
+
+                <table class="table table-hover table-sm mt-3">
+                    <thead class="thead-light">
+                        <tr class="table-primary">
+                            <th>Staff Name</th>
+                            <th>Number of alloted Assets</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                        {% for i in page_obj %}
+
+                        <tr>
+                            <td>{{i.Firstname}} {{i.Lastname}}</td>
+                            <td>{{i.assignment_set.all.count}}</td>
+                            <td><a class="btn green-color btn-sm text-white" href="{% url 'staff' i.Username%}">View</a></td>
+                        </tr>
+                        {% endfor %}
+                </table>
+        
+                <div class="row pagination-container" id="pagination">
+                    <div class="col-md-10">
+                        Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    </div>
+                <div class="align-right float-right mr-auto">
+                        <ul class="pagination align-right float-right mr-auto">
+                    
+                            {%  if page_obj.has_previous %}
+                                <li {%  if page_obj.number == 1 %}  class="page-item active"  {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                                <li class="page-item"><a class=page-link href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                            {% endif %}
+                            {%  if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{page_obj.paginator.num_pages}} &raquo;</a></li>
+                            {% endif %}
+                    
+                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="col-md-4 shadow-lg p-3 ml-3 mb-5 bg-body rounded">
+    
+    {% comment %} <h6 class="mt-3 mb-3">Asset Requests</h6> {% endcomment %}
+
+    <div class="card border-0 shadow-lg p-3 mb-5 bg-body rounded" >
+        <h6 class='card-title text-success'>Asset Requests</h6>
+        <div class="card-body">
+            <table class="table table-hover table-sm">
+                <thead class="thead-light">
+                    <tr class="table-primary">
+                    {% comment %} <th>Request ID</th> {% endcomment %}
+                        <th>Staff Name</th>
+                        <th>Device Type/Device</th>
+                    {% comment %} <th>Reason</th> {% endcomment %}
+                    {% comment %} <th>{{i.Username.Firstname}} </th> {% endcomment %}
+                    {% comment %} {{i.Username.Lastname}}</td><th>Date Requested</th> {% endcomment %}
+                    {% comment %} <th>`view</th> {% endcomment %}
+                    {% comment %} <th>Reject</th> {% endcomment %}
+
+                </tr>
+            </thead>
+            {% for i in Asset_Requests %}
+                <tr>
+                    {% comment %} <td>{{i.id}}</td> {% endcomment %}
+                    <td>{{i.Username.Firstname}} 
+                        {{i.Username.Lastname}}</td>
+                    <td class=""><a class="" href="{% url 'RQView' i.id %}">{{i.Device_Type}} {{i.Assigned_Device}}</a></td>
+                    {% comment %} <td>{{i.Reason}}</td> {% endcomment %}
+                    {% comment %} <td>{{i.Date_Requested}} </td> {% endcomment %}
+                    {% comment %} <td><a class="btn-success btn-sm" href="{% url 'RQView' i.id %}">View</a></td> {% endcomment %}
+                    {% comment %} <td><a class="btn-danger btn-sm" href="{% url 'reject' i.id %}">Reject</a></td> {% endcomment %}
+
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+    </div>
+    
+    <div class="col-sm mt-3">
+    <h6 class="card-title mt-3 mb-2 text-success">Requests in Process</h6>
+
+        <div class="card border-0" >
+            
+            <div class="card-body">
+
+            
+            <table class="table table-hover table-sm">
+                <thead class="thead-light">
+                    <tr class="table-primary">
+                        
+                        <th>Requested By</th>
+                       
+                        
+                        <th>Assigned_Device</th>
+
+                        <th>Device Type</th>
+                         <th>Status</th>
+                        <th>Approval Stage</th>
+                        {% comment %} <th>Stage 2</th>
+                        <th>State 3</th> {% endcomment %}
+                        {% comment %} <th>Date Modified</th> {% endcomment %}
+                        
+
+                    </tr>
+                </thead>
+                {% for i in processing %}
+                    <tr>
+                        {% comment %} <td>{{i.id}}</td> {% endcomment %}
+                        <td>{{i.Username.Firstname}} 
+                    {{i.Username.Lastname}}</td>
+                        <td>{{i.Assigned_Device}}</td>
+                        <td>{{i.Device_Type}}</td>
+                        <td>{{i.Status}}</td>
+                        {%if i.AssetManagerApproval == "Approved" %}
+
+                        <td>Supervisor Approval </td>
+                        {% elif i.SupervisorApproval == "Approved" %}
+                        <td>Finance Approval </td>
+                        {% elif i.FinanceManagerApproval == "Approved" %}
+                        <td>No Action </td>
+                        {% endif %}
+                        {% comment %} <td>{{i.Last_Modified}} </td> {% endcomment %}
+                        
+                    </tr>
+                    {% endfor %}
+            </table>
+        </div>
+        </div>
+    <br>
+
+</div>
+</div>

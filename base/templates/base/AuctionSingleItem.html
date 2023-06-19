@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+{% include 'base/searchNav.html' %}
+
+<div class="container-fluid">
+    <div class="d-flex col-md justify-content-center mb-3 p-3">
+        <div class="card col-md-3 p-3">
+    <h4>
+        Enter Asset Auction Details
+    </h4>
+    <h6>
+        Enter details about single auction here. (Income from disposal, Buyer, method of auction etc.)
+    </h6>
+</div>
+</div>
+<div class="d-flex col-md justify-content-center">
+<div class="card col-md-3">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% include 'base/validationmessages.html' %}
+
+            {% csrf_token %}
+            <div class='form-row ' >
+                <div class="form-group col-md-12">
+                    <!-- <label for="">Requester</label> -->
+                    {{form.Ast_Tag_nbr}}
+                </div>
+                
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="">Fair Market Value</label>
+                {{form.fairMarketValue }}
+             </div>
+             <div class="form-group">
+                <label for="">Sold at (UGX)</label>
+                {{form.disposalIncome}}
+             </div>
+           
+             <div class="form-group">
+                <label for="">Buyer</label>
+                {{form.Buyer}}
+             </div>
+             <div class="form-group">
+                <label for="">Disposal Procedure</label>
+                {{form.disposalProcedure}}
+             </div>
+             
+            <div class="form-group">
+                <label for="">Payment Mode</label>
+                {{form.Paymentmode}}
+             </div>
+         
+             <div class="form-group">
+                <label for="">Auction Approval status</label>
+                {{form.CR_Approval}}
+             </div>
+             <div class="form-group">
+                <label for="">User Comments</label>
+                {{form.disposalExplanation}}
+             </div>
+             <div class="form-group">
+                <label for="">Approver Comments</label>
+                {{form.comments}}
+             </div>
+             <div class="form-group">
+                <label for="">Date of Disposal</label>
+                {{form.disposalDate}}
+             </div>
+             <div class="form-group">
+                <label for="">Attachment (Invoices, Receipts, Memo's)</label>
+                {{form.attachment}}
+             </div>
+            </div>  
+            <input type="submit" value="Confirm Sale" class="btn btn-default btn-primary">
+
+        </form>
+
+    </div>
+</div>
+</div>
+
+{% endblock %}

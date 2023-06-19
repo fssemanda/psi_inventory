@@ -1,0 +1,222 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+:root {
+    --nav-width: 92px;
+    --first-color: #0C5DF4;
+    --bg-color: #12192C;
+    --sub-color: #B6CEFC;
+    --white-color: #FFF;
+    --green-color:#00AA67;
+    --black-color:#000;
+    /*--new-bg-color:#d1dbec;*/
+    --new-bg-color:#f7faff;
+    --purpie-color:#a66dd4;
+    --aquaie-color:#63c7ff;
+    --blueie-color:#3b76ef;
+    --greenie-color:#6dd4b1;
+    --body-font: 'Poppins', sans-serif;
+    --normal-font-size: 1rem;
+    --small-font-size: .875rem;
+
+    --z-fixed: 100;
+}
+/* ===============BASE=================   */
+
+*,::before,::after{
+        box-sizing: border-box;
+    }
+body{
+    position: relative;
+    margin: 0;
+    padding: 2rem 0 0 6.75rem;
+    background-color: var(--new-bg-color);
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+    transition: .5s;
+
+}
+
+h1{margin: 0;}
+
+ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+
+.l-navbar{
+    position: fixed;
+    top:0;
+    left:0;
+    width:var(--nav-width);
+    height:100vh;
+    background-color: var(--bg-color);
+    color:var(--white-color);
+    padding: 1.5rem 1.5rem 2rem;
+    transition: .5s;
+    z-index: var(--z-fixed);
+
+}
+
+.nav{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.nav__brand{
+    display: grid;
+    grid-template-columns: max-content max-content;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    /*background-color: var(--white-color)*/
+}
+
+.nav__toggle{
+    font-size: 1.25rem;
+    padding: .75rem;
+    cursor: pointer;
+    color: var(--white-color);
+
+}
+
+.nav__logo{
+    color: var(--white-color);
+    font-weight: 500;
+}
+
+.nav__link{
+    display: grid;
+    grid-template-columns: max-content max-content;
+    align-items: center;
+    column-gap: .75rem;
+    padding: .75rem;
+    color: var(--white-color);
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    transition: .3s;
+    cursor: pointer;
+}
+.nav__link:hover{
+    background-color: var(--first-color);
+    text-decoration:none;
+    color:var(--white-color);
+}
+.nav__icon{
+    font-size: 1.25rem;
+}
+.nav__name{
+    font-size: var(--small-font-size);
+}
+.expander{
+    width: calc(var(--nav-width) + 9.25rem);
+
+}
+.body-pd{
+    padding: 2rem 0 0 16rem ;
+
+}
+
+.bg-main{
+    background-color: var(--new-bg-color);
+}
+
+.bg-white{
+    background-color: var(--white-color);
+    margin-bottom:1.25rem;
+}
+
+.active{
+    color: var(--white-color);
+    background-color: var(--green-color);
+    
+}
+
+.myactive{
+    background-color: var(--green-color);
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+
+}
+.lines{
+    /* background-color: var(---color); */
+    padding:0.25rem;
+    margin-left:0.15rem;
+}
+.subActive{
+    background-color: var(--bg-color);
+}
+
+.collapse{
+    grid-template-columns: 20px max-content 1fr;
+}
+
+.collapse__link{
+    justify-self: flex-end;
+    transition: .5s;
+}
+
+.collapse__menu{
+    display: none;
+    padding: .75rem 2.25rem ;
+}
+
+.collapse__sublink{
+    color: var(--white-color);
+    font-size: var(--small-font-size);
+
+}
+.collapse__sublink:hover{
+    color: var(--white-color);
+
+}
+.showCollapse{
+    display: block;
+}
+
+.rotate{
+    transform: rotate(180deg);
+    transition: .5s;
+}
+.table__text{
+    font-size: var(--normal-font-size);
+    font-family: var(--body-font);
+}
+.header__intro{
+    color: var(--white-color);
+    font-weight: 600;
+}
+.no-border{
+    border:none;
+}
+
+.greenie{
+    background-color: var(--greenie-color);
+}
+.blueie{
+    background-color: var(--blueie-color);
+}
+.purpie{
+    background-color: var(--purpie-color);
+}
+.aquaie{
+    background-color: var(--aquaie-color);
+}
+.card__head{
+    color: var(--white-color);
+}
+
+.card_bg
+{
+       background-color: var(--new-bg-color);
+}
+
+.tdata:a{
+text-decoration:none;
+}

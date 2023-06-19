@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Staff Device Assignments</li>
+          </ol>
+        </nav>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'add-asset' %}" class="btn btn-success">Add New</a> &nbsp <a class="btn btn-secondary" href="{% url 'Assignments' %}" role="button">Bulk Assign</a>
+    </div>
+</div>
+
+<div class="row">
+    <p></p>
+</div>
+<div class="container-fluid">
+
+
+    <div class="row"></div>
+
+    <div class="row">
+        <p></p>
+    </div>
+    <div class="row">
+    <div class="col-md-4">
+
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Type here to Search" id="searchHere">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Search</button>
+      </span>
+    </div>
+
+
+
+
+    </div>
+
+</div>
+ <div class="row">
+        <p></p>
+    </div>
+
+
+    <div class="card card-body">
+        <h1 class="h3">Assigned Assets</h1>
+        {% include 'base/validationmessages.html' %}
+    </div>
+    <div class="original-table">
+        <table id="box" class="table table-hover table table-responsive table-sm">
+            <thead class="thead">
+                <tr>
+                    <th scope="row">Staff Name</th>
+                    <th scope="row">Engraved Number</th>
+                    <th scope="row">Serial</th>
+                    <th scope="row">Model Number</th>
+
+                    <th scope="row">Location</th>
+                    <th scope="row">Type</th>
+                    <th scope="row">Condition</th>
+
+
+
+
+                    <th scope="row">Donor Project</th>
+                    
+                    <th scope="row">Withdraw Asset</th>
+                </tr>
+            </thead>
+            {% for item in page_obj %}
+                <tr >
+
+                    <td>{{item.Username.Firstname}} &nbsp; {{item.Username.Lastname}}</td>
+                    <td><a href="{% url 'assetdetails' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+
+                    <td>{{item.Ast_Tag_nbr.Serial_No}}</td>
+                    <td>{{item.Ast_Tag_nbr.Model_No}}</td>
+
+                    <td>{{item.Ast_Tag_nbr.Location}}</td>
+                    <td>{{item.Ast_Tag_nbr.Asset_Type}}</td>
+                    <td>{{item.Ast_Tag_nbr.Asset_Condition}}</td>
+
+
+
+
+                    <td>{{item.Project_Name}}</td>
+                   
+                        <td><a class="btn-danger btn-sm" href="{% url 'withdraw-item' item.id %}">Withdraw</a></td>
+
+
+
+                </tr>
+                  {% endfor %}
+        </table>
+    </div>
+
+
+</div>
+
+
+<div class="row pagination-container" id="pagination">
+<div class="col-md-10">
+    Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+</div>
+<div class="align-right float-right mr-auto">
+    <ul class="pagination align-right float-right mr-auto">
+
+        {%  if page_obj.has_previous %}
+            <li {%  if page_obj.number == 1 %}  class="page-item active"  {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+            <li class="page-item"><a class=page-link href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {%  if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{page_obj.paginator.num_pages}} &raquo;</a></li>
+        {% endif %}
+
+        </ul>
+</div>
+</div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/searchData.js' %}"></script>
+{% endblock scripts %}

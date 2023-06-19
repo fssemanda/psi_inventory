@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Disposal list</li>
+          </ol>
+        </nav>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'add-asset' %}" class="btn btn-success">Submit list for approve</a>
+    </div>
+</div>
+
+<div class="row">
+    <p></p>
+</div>
+<div class="container-fluid">
+
+
+    <div class="row"></div>
+
+    <div class="row">
+        <p></p>
+    </div>
+    <div class="row">
+    <div class="col-md-4">
+
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Type here to Search" id="searchHere">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Search</button>
+      </span>
+    </div>
+
+
+
+
+    </div>
+
+</div>
+ <div class="row">
+        <p></p>
+    </div>
+
+
+    <div class="card card-body">
+        <h4 class="">Asset disposal list</h4>
+        {% include 'base/validationmessages.html' %}
+    </div>
+    <div class="original-table">
+        <table id="box" class="table table-hover table table-responsive table-sm">
+            <thead class="thead">
+                <tr>
+                    <th scope="row">Engraved Number</th>
+                    <th scope="row">Serial</th>
+                    <th scope="row">Model Number</th>
+
+                    <th scope="row">Location</th>
+                    <th scope="row">Type</th>
+                    <th scope="row">Condition</th>
+                    <th scope="row">Availability</th>
+                    <th scope="row">Purchase Date</th>
+                    <th scope="row">Cost (UGX)</th>
+                    <th scope="row">Cost (USD)</th>
+                    <th scope="row">Donor Project Code</th>
+                    <th scope="row">Donor Project</th>
+                    <th scope="row" rowspan="3">Actions</th>
+<!--                    <th scope="row">Delete</th>-->
+                </tr>
+            </thead>
+            {% for item in disposalObj %}
+                <tr >
+
+                    <td><a href="{% url 'assetdetails' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+                    <td>{{item.Serial_No}}</td>
+                    <td>{{item.Model_No}}</td>
+
+                    <td>{{item.Location}}</td>
+                    <td>{{item.Asset_Type}}</td>
+                    <td>{{item.Asset_Condition}}</td>
+                    <td>{{item.Availability}}</td>
+                    <td>{{item.PurchaseDate}}</td>
+                    <td>{{item.Item_Cost_UGX|floatformat:2|intcomma}}</td>
+                    <td>{{item.Item_Cost_USD|floatformat:2|intcomma}}</td>
+                    <td>{{item.Project}}</td>
+                    <td>{{item.Project_Name}}</td>
+                    <td><a class="btn-danger btn-sm" href="{% url 'remove' item.Ast_Tag_nbr %}">Remove</a></td>
+
+
+
+
+                </tr>
+                  {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+{% include 'base/searchNav.html' %}
+    <div class="card border-2">
+
+        <div class="card-body">
+            
+            <table id="box" class="table table-hover table-bordered table-responsive table-sm">
+                <thead class="thead">
+                    <tr>
+                        <th scope="row">Engraved Number</th>
+                        <th scope="row">Tag Number</th>
+                        <th scope="row">Serial</th>
+                        <th scope="row">Model Number</th>
+    
+                        <th scope="row">Location</th>
+                        <th scope="row">Type</th>
+                        <th scope="row">Condition</th>
+                        <th scope="row">Availability</th>
+                        <th scope="row">Donor Project Code</th>
+                        <th scope="row">Donor Project</th>
+                        <th scope="row">Supplier</th>
+                        <th scope="row">Purchase Date</th>
+                        <th scope="row">Cost (UGX)</th>
+                        <th scope="row">Cost (USD)</th>
+                        
+                        <th scope="row" rowspan="3">Actions</th>
+    <!--                    <th scope="row">Delete</th>-->
+                    </tr>
+                </thead>
+               
+                    <tr >
+    
+                        <td><a href="{% url 'assetdetails' OriginalObject.Ast_Tag_nbr %}">{{OriginalObject.Ast_Tag_nbr}}</a></td>
+                        <td>{{OriginalObject.AstNo}}</td>
+                        <td>{{OriginalObject.Serial_No}}</td>
+                        <td>{{OriginalObject.Model_No}}</td>
+    
+                        <td>{{OriginalObject.Location}}</td>
+                        <td>{{OriginalObject.Asset_Type}}</td>
+                        <td>{{OriginalObject.Asset_Condition}}</td>
+                        <td>{{OriginalObject.Availability}}</td>
+                        <td>{{OriginalObject.Project}}</td>
+                        <td>{{OriginalObject.Project_Name}}</td>
+                        
+                        <td>{{OriginalObject.Vendor}}</td>
+                        <td>{{OriginalObject.PurchaseDate}}</td>
+                        <td>{{OriginalObject.Item_Cost_UGX|floatformat:2|intcomma}}</td>
+                        <td>{{OriginalObject.Item_Cost_USD|floatformat:2|intcomma}}</td>
+                        
+                        
+    
+    
+                    </tr>
+                      
+            </table>
+
+        </div>
+        <div class="container lines">
+            <h4>
+                Requested Modifications
+            </h4>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% include 'base/validationmessages.html' %}
+    
+                    {% csrf_token %}
+                    <div class='form-row'>
+                        <div class="form-group col-md-2 .d-none">
+                            <!-- <label for="">Requester</label> -->
+                            {{ApprovalObjectForm.Requester}}
+                        </div>
+                        
+                    </div>
+                    <div class='form-row'>
+                    <div class="form-group col-md-2">
+                        <label for="">Engraved Number</label>
+                        {{ApprovalObjectForm.AstTagnbr}}
+                     </div>
+                     <div class="form-group col-md-2">
+                        <label for="">Asset Tag Number</label>
+                        {{ApprovalObjectForm.AstNo}}
+                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="">Serial Number</label>
+                        {{ApprovalObjectForm.SerialNo}}
+                     </div>
+                   
+                     
+                    <div class="form-group col-md-2">
+                        <label for="">Description</label>
+                        {{ApprovalObjectForm.AstDescription}}
+                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="">Asset Type</label>
+                        <select class="form-control " name="AssetType" id='asset_type_id'>
+                            <option value="{{AssetObj.Asset_Type}}" selected>{{AssetObj.Asset_Type}}</option>
+                          {% for item in ApprovalObjectForm.AssetType %}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="">Model No</label>
+                            {{ApprovalObjectForm.ModelNo}}
+                     </div>
+                    </div>
+             
+                 <div class =  "form-row">
+                    <div class="form-group col-md-2">
+                        
+                        <label for="">Project</label>
+                        <select class="form-control " name="Project" id='project'>
+                            {% for item in ApprovalObjectForm.Project %}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Condition</label>
+                         <select class="form-control " name="AssetCondition" id='condition_id'>
+                            {% for item in ApprovalObjectForm.AssetCondition %}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Status</label>
+                         <select class="form-control " name="AssetStatus" id='asset_status'> 
+                            {% for item in ApprovalObjectForm.AssetStatus %}
+                            {{item}}
+                        {% endfor %}
+                        </select>
+                     </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Project Name</label>
+                         <select class="form-control " name="ProjectName" id='project_name_id'>
+                            {% for item in ApprovalObjectForm.ProjectName %}
+                                {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Availability</label>
+                         <select class="form-control " name="Availability" id='availability_id'>
+                            {% for item in ApprovalObjectForm.Availability%}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Location</label>
+                         <select class="form-control " name="Location" id='location_id'>
+                            {% for item in ApprovalObjectForm.Location %}
+                                    {{item}}
+                            {% endfor %}
+                        </select>
+                     </div>
+                    </div>
+                    <div class =  "form-row">
+                        <div class="form-group col-md-2 col-sm-2">
+                            <label for="">Purchase Date</label>
+                            
+                            {{ApprovalObjectForm.PurchaseDate}}
+                         </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Item_Cost_UGX</label>
+                        {{ApprovalObjectForm.ItemCostUGX}}
+                    </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Item_Cost_USD </label>
+                       {{ApprovalObjectForm.ItemCostUSD}}
+                    </div>
+                    <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Supplier/Vendor</label>
+                        {{ApprovalObjectForm.Vendor}}
+                     </div>
+                     </div>
+                     <div class="form-row">
+                        <div class="form-group col-md-2 col-sm-2">
+                            <label for="">Comments</label>
+                            {{ApprovalObjectForm.RequesterComments}}
+                         </div>
+                     
+                     <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Finance Manager Comments</label>
+                        {{ApprovalObjectForm.FAMApprovalComments}}
+                     </div>
+                     <div class="form-group col-md-2 col-sm-2">
+                        <label for="">Approval Action</label>
+                        <select class="form-control " name="FAMApproval" id='FAMApproval_id'>
+                           {% for item in ApprovalObjectForm.FAMApproval %}
+                                   {{item}}
+                           {% endfor %}
+                       </select>
+                       </div></div>
+                    <input type="submit" value="Save" class="btn btn-default btn-primary">
+    
+                </form>
+    
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

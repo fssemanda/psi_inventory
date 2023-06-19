@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Auction Assets</li>
+          </ol>
+        </nav>
+    </div>
+    
+</div>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="d-flex justify-content-around">
+            <div class="card-body  p-2 ">
+
+            <p class="card-title">Auction list</p>
+            <a href="{% url 'export-list' %}">Export disposal List</a>
+            {% include 'base/validationmessages.html' %}
+        </div>
+        <div class="p-2 col ">
+            <form method="POST">
+                 {% csrf_token %}
+                 <div class="input-group p-2 mt-3">
+                    
+                    <input type=text class="form-control-sm form-rounded 
+                    bg-white text-primary col-md-6 p-3
+                     " placeholder="Search items" name="Ast_Tag" value="{{values.Ast_Tag}}"/>
+                    <div class="input-group-append">
+                        <span><input type="submit" value="search" name="search" class="btn btn-light"></span>
+                    </div>
+
+                 </div>
+            </form>
+        </div>
+        {{values.Ast_Tag}}
+    </div>
+    <div class="original-table p-3 shadow-lg mb-2 bg-body rounded">
+        <table id="box" class="table table-hover table table-responsive table-sm">
+            <thead class="thead">
+                <tr>
+                    <th scope="row">Asset Number</th>
+                    
+                    <th scope="row">Model Number</th>
+                    <th scope="row">Type</th>
+                    
+                    <th scope="row">Donor Project</th>
+                    
+                    <th scope="row">Cost (UGX)</th>
+                    <th scope="row">Cost (USD)</th>
+                    <th scope="row">Purchase Date</th>
+                    <th scope="row">Fair Market Value</th>
+                    <th scope="row">Disposal Procedure</th>
+                    <th scope="row">Disposal Income</th>
+                    
+                    <th scope="row">Date of Disposal</th>
+                    <th scope="row">Disposal Explanation</th>
+                    <th scope="row">Comments</th>
+                    <th scope="row">Other Attachments</th>
+                    <th scope="row">CR Approval Status</th>
+
+
+                    
+                    <!-- <th scope="row" rowspan="3">Actions</th> -->
+<!--                    <th scope="row">Delete</th>-->
+                </tr>
+            </thead>
+            {% for item in items %}
+                <tr>
+
+                    <td><a href="{% url 'asset_auction' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+                   
+                    <td>{{item.Ast_Tag_nbr.Model_No}}</td>
+                    <td>{{item.Ast_Tag_nbr.Asset_Type}}</td>
+                    <td>{{item.Ast_Tag_nbr.Project_Name}}</td>
+                    <td>{{item.Item_Cost_UGX|floatformat:2|intcomma}}</td>
+                    <td>{{item.Item_Cost_USD|floatformat:2|intcomma}}</td>
+                    <td>{{item.PurchaseDate}}</td>
+                    <td>{{item.fairMarketValue}}</td>
+                   
+                    <td>{{item.disposalProcedure}}</td>
+                    <td>{{item.disposalIncome}}</td>
+                    <td>{{item.disposalDate}}</td>
+                    <td>{{item.disposalExplanation}}</td>
+                   
+                    <td>{{item.comments}}</td>
+                    {% comment %} <td><a href="{{item.attachment.url}}">{{item.attachment.url}}<a></td> {% endcomment %}
+                    <td>{{item.CR_Approval}}</td>
+
+                    
+                    
+                    
+                   
+                    
+                    
+
+                    <!-- <td><a class="btn-danger btn-sm" href="{% url 'remove' item.Ast_Tag_nbr %}">Remove</a></td> -->
+
+
+
+
+                </tr>
+                  {% endfor %}
+        </table>
+    </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'base/searchNav.html' %}
+<div class="d-flex justify-content-center">
+<div class="card col-6 p-2">
+    <div class="card-body">
+        <form method="post">
+            {% include 'base/validationmessages.html' %}
+
+            {% csrf_token %}
+            <div class="form-group p-3 ">
+                <label for="">Asset Tag Number</label>
+                <input type="text" class="form-control col-sm-6 col col-md-6" name="Ast_Tag_nbr" value="{{assetRqObj.Ast_Tag_nbr}}">
+             </div>
+            <div class="form-group p-3">
+                <label for="">Reason</label>
+                <input type="textarea" rows="4" class="form-control" name="Reason" >
+             </div>
+            
+
+            <input type="submit" value="Save" class="btn btn-default btn-primary btn-md">
+
+        </form>
+
+    </div>
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+<thead class="thead-light">
+                <tr>
+                    <th scope="row">AST-TAG-NBR-A</th>
+                    <th scope="row">SERIAL NUMBER</th>
+                    <th scope="row">LAWSON ASSET #</th>
+                    <th scope="row">ASSIGNED TO</th>
+                    <th scope="row">ASSET LOCATION</th>
+                    <th scope="row">ASSET TYPE</th>
+                    <th scope="row">ASSET CONDITION</th>
+                    <th scope="row">AVAILABILITY</th>
+                    <th scope="row">PURCHASE DATE</th>
+                    <th scope="row">ITEM COST UGX</th>
+                    <th scope="row">ITEM COST USD</th>
+                    <th scope="row">PROJECT CODE</th>
+                    <th scope="row">PROJECT NAME</th>
+                </tr>
+            </thead>
+            {% for item in assets %}
+                <tr >
+
+                    <td class="tdata"><a href="{% url 'assetdetails' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+                    <td>{{item.Serial_No}}</td>
+                    <td>{{item.Lawson_Asset_No}}</td>
+                    <td>{{item.Username}}</td>
+                    <td>{{item.Location}}</td>
+                    <td>{{item.Asset_Type}}</td>
+                    <td>{{item.Asset_Condition}}</td>
+                    <td>{{item.Availability}}</td>
+                    <td>{{item.PurchaseDate}}</td>
+                    <td>{{item.Item_Cost_UGX}}</td>
+                    <td>{{item.Item_Cost_USD}}</td>
+                    <td>{{item.Project}}</td>
+                    <td>{{item.Project_Name}}</td>
+
+
+
+                </tr>
+                  {% endfor %}
+
+
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+{% include 'base/searchNav.html' %}
+<div class="row">
+    <p></p>
+</div>
+<div class="container-fluid">
+   <div class="row ">
+
+       <div class="col-md-4">
+            <div class="card card-body">
+
+                    <h5>Total Asset Value</h5>
+
+
+                    <p>USD</p>
+
+            </div>
+       </div>
+
+       <div class="col-md-4">
+           <div class="card">
+                <div class="card-header">
+                    <h3>Number of Assets</h3>
+                </div>
+                <div class="card card-body">
+                    total assets
+                </div>
+            </div>
+       </div>
+
+       <div class="col-md-3">
+           <div class="card">
+                <div class="card-header">
+                    <h3>Assets above $5000</h3>
+                </div>
+                <div class="card card-body">
+                    total assets
+                </div>
+            </div>
+       </div>
+   </div>
+
+
+
+    <div class="row"></div>
+
+    <div class="row">
+        <p></p>
+    </div>
+    <div class="row">
+    <div class="col-md-4">
+
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Type here to Search" id="search_here">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Search</button>
+      </span>
+    </div>
+
+
+
+
+    </div>
+
+</div>
+ <div class="row">
+        <p></p>
+    </div>
+
+
+    <div class="card card-body">
+        <h1 class="h3">Available Assets</h1>
+    </div>
+
+        <table id="box" class="table table-hover table-bordered table-responsive table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="row">AST-TAG-NBR-A</th>
+                    <th scope="row">SERIAL NUMBER</th>
+                    <th scope="row">LAWSON ASSET #</th>
+                    <th scope="row">ASSIGNED TO</th>
+                    <th scope="row">ASSET LOCATION</th>
+                    <th scope="row">ASSET TYPE</th>
+
+            </thead>
+            {% for item in employee %}
+                <tr >
+
+
+                    <td>{{item.Username}}</td>
+                    <td>{{item.User}}</td>
+                    <td>{{item.Firstname}}</td>
+                    <td>{{item.Lastname}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.Staffrole}}</td>
+
+
+
+
+                </tr>
+                  {% endfor %}
+        </table>
+    <p><a class="btn btn-secondary btn-sm" href="{% url 'upload' %}" role="button">Upload&raquo;</a></p>
+<!--    console.log(my_data)-->
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const my_data = '{{qs_json}}'
+    console.log(my_data)
+    new_data = my_data.replace(/&quot;/g, '"')
+
+
+    const cleaned_data =  JSON.parse(new_data)
+    console.log(cleaned_data)
+
+    const input = document.getElementById('search_here')
+
+    let filteredArr =[]
+    input.addEventListener('keyup',(e)=>{
+        box.innerHTML =""
+        filteredArr = cleaned_data.filter(AssetTb=>AssetTb['email'].includes(e.target.value))
+        console.log(filteredArr)
+
+        if(filteredArr.length>0){
+            filteredArr.map(AssetTb=>{
+                box.innerHTML +=`<td>${AssetTb['email']}</td>`
+                }
+
+            )
+        }else
+        {
+            box.innerHTML = "<b>No love found</b>"
+        }
+    })
+
+
+</script>
+{% endblock scripts %}
+
+
+CODE FROM LISTING
+
+<div class="row ">
+
+       <div class="col-md-4">
+            <div class="card card-body">
+
+                    <h5>Total Asset Value</h5>
+
+
+                    <p>USD</p>
+
+            </div>
+       </div>
+
+       <div class="col-md-4">
+           <div class="card">
+                <div class="card-header">
+                    <h3>Number of Assets</h3>
+                </div>
+                <div class="card card-body">
+                    total assets
+                </div>
+            </div>
+       </div>
+
+       <div class="col-md-3">
+           <div class="card">
+                <div class="card-header">
+                    <h3>Assets above $5000</h3>
+                </div>
+                <div class="card card-body">
+                    total assets
+                </div>
+            </div>
+       </div>
+   </div>
+

@@ -1,0 +1,88 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Asset Export</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        @page{
+            size: "A4";
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+            orientation: landscape;
+
+        @top-center{
+        content: "PSI UGANDA INVENTORY REPORT";
+            }
+
+            @bottom-right{
+
+                content:"Page " counter(page) " of " counter(pages);
+            }
+
+        }
+       
+
+        
+        
+
+       
+
+    </style>
+
+</head>
+<body>
+    <img src="{% static 'img/psiug_web.png' %}" class="nav__brand">
+    
+    <table id="box" class="table table-bordered table-sm">
+        
+            <tr>
+                <th >No</th>
+                <th >Engraved Number</th>
+                <th >Serial</th>
+                <th >Model Number</th>
+                <th >Description</th>
+                
+                <th >Location</th>
+                <th >Type</th>
+                <th >Condition</th>
+                <th >Availability</th>
+                <th >Donor Project Code</th>
+                <th >Donor Project</th> 
+                <th >Cost (UGX)</th>
+                <th >Cost (USD)</th>
+                
+                <th >Purchase Date</th>
+                
+<!--                    <th >Delete</th>-->
+            </tr>
+       
+        {% for item in queryObj %}
+            <tr >
+
+                <td>{{forloop.counter}}</td>
+                <td>{{item.Serial_No}}</td>
+                <td>{{item.Model_No}}</td>
+                <td>{{item.Asset_description}}</td>
+
+                <td>{{item.Location}}</td>
+                <td>{{item.Asset_Type}}</td>
+                <td>{{item.Asset_Condition}}</td>
+                <td>{{item.Availability}}</td>
+                
+                <td>{{item.Project}}</td>
+                <td>{{item.Project_Name}}</td>
+                <td>{{item.Item_Cost_UGX}}</td>
+                <td>{{item.Item_Cost_USD}}</td>
+              
+                <td>{{item.PurchaseDate}}</td> 
+               
+            </tr>
+            {% endfor %}
+</table>
+
+</body>
+</html>

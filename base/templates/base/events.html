@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container col-12">
+    {% include 'base/validationmessages.html' %}
+        <div class="row">
+            <div class="card col-12">
+                <div class="card-body">
+                    <table>
+                        <thead class="thead">
+                        <tr>
+                            <th scope="row">Event ID</th>
+                            <th scope="row">Event Type</th>
+                            <th scope="row">Summary</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in myevents %}
+                            <tr>
+                                <td>{{event.id}}</td>
+                                <td>{{event.EventType}}</td>
+                                <td>{{event.EventSummary}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<div>
+</div>
+{% endblock %}

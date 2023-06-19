@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<style>
+            .hidden{
+            display:none;
+            }
+            .result{
+            max-width:80px;
+            }
+     </style>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+
+
+<div class="row">
+
+
+
+	<div class="col-lg">
+
+		<div class="card card-body">
+
+			<!-- Form Wrapper & Button -->
+
+
+			<!-- Data Table -->
+			<table class="table table-hover table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+			      <th scope="col">Item</th>
+			      <th scope="col">Description</th>
+			      <th scope="col">Quantity</th>
+			      <th scope="col"> Comments</th>
+			      <th scope="col"></th>
+
+			    </tr>
+			  </thead>
+			  <tbody id="tests-table">
+
+			  </tbody>
+			</table>
+
+			<div class="form-wrapper hidden">
+				<select class="form-control" id="test-name">
+					{% for item in items %}
+				 		<option name="{{item.id}}">{{item.Ast_Tag_nbr}}</option>
+				 	{% endfor %}
+				</select>
+				<input class="form-control" type="text" id="test-result">
+				<button class="btn btn-sm btn-info" id="create-test">Add</button>
+			</div>
+			<button class="btn btn-sm btn-primary" id="add-test">Add Test</button>
+
+		</div>
+
+
+	</div>
+
+	<div class="col-md-4"></div>
+</div>
+
+ <div class="row">
+		<div class="container-fluid">
+	 <div class="card">
+		 <form method="POST" action="">
+			 <select>
+				 {% for item in items %}
+				 	<option name="{{item.id}}">{{item.Ast_Tag_nbr}}</option>
+				 {% endfor %}
+			 </select>
+		 </form>
+	 </div>
+
+ 	</div>
+</div>
+
+<script>
+
+	var newId = 1
+	var newTest = {'name':null, 'id':`test-${newId}`, 'result':null,'description':null, 'comments':null}
+
+	$('#add-test').on('click', function(){
+		$('.form-wrapper').removeClass('hidden')
+	})
+
+
+	$('#test-result').on('keyup', function(){
+		newTest.result = $(this).val()
+		console.log(newTest)
+	})
+
+	$('#test-name').on('change', function(){
+		newTest.name = $(this).val()
+		console.log(newTest)
+	})
+
+	$('#create-test').on('click', function(){
+
+		if(newTest.name == null){
+			alert('No test selected')
+		}else{
+			addRow(newTest)
+			createTestPOST()
+			$('#test-name').val('')
+			$('#test-result').val('')
+			$('.form-wrapper').addClass('hidden')
+
+		}
+
+	})
+
+	function createTestPOST(){
+        var url = '/requisitions/createitem/'
+
+        $.ajax({
+            method:'POST',
+            url:url,
+            data:newTest,
+            success:function(){
+
+            }
+        })
+
+    }
+
+
+    function updateTestPOST(data){
+        var url = '/requisitions/updateitem/'
+        $.ajax({
+            method:'POST',
+            url:url,
+            data:data,
+            success:function(){
+
+            }
+        })
+
+
+    }
+
+    function deleteTestPOST(data){
+        var url = '/requisitions/deleteitem/'
+        $.ajax({
+            method:'POST',
+            url:url,
+            data:data,
+            success:function(){
+
+            }
+        })
+
+
+    }
+	var tests = []
+	var dataURL = '/requisitions/requestapi/'
+
+	$.ajax({
+		method:'GET',
+		url: dataURL,
+		success:function(response){
+			tests = response
+			console.log(tests)
+			for (var i in tests){
+				addRow(tests[i])
+			}
+
+		}
+	})
+	function addRow(obj){
+        var row = `<tr scope="row" class="test-row-${obj.id}">
+                       <td>${obj.name}</td>
+                       <td id="result-${obj.id}" data-testid="${obj.id}">${obj.result}</td>
+                       <td id="result-${obj.id}" data-testid="${obj.description}">${obj.description}</td>
+                       <td id="result-${obj.comments}" data-testid="${obj.comments}">${obj.comments}</td>
+
+                       <td>
+                            <button class="btn btn-sm btn-danger" data-testid=${obj.id} id="delete-${obj.id}">Delete</button>
+                            <button class="btn btn-sm btn-info" disabled data-testid="${obj.id}"  id="save-${obj.id}">Save</button>
+
+                            <button class="btn btn-sm btn-danger hidden" data-testid="${obj.id}"  id="cancel-${obj.id}">Cancel</button>
+                            <button class="btn btn-sm btn-primary hidden" data-testid="${obj.id}"  id="confirm-${obj.id}">Confirm</button>
+
+                       </td>
+                   </tr>`
+        $('#tests-table').append(row)
+
+        $(`#delete-${obj.id}`).on('click', deleteTest)
+        $(`#cancel-${obj.id}`).on('click', cancelDeletion)
+        $(`#confirm-${obj.id}`).on('click', confirmDeletion)
+        $(`#save-${obj.id}`).on('click', saveUpdate)
+
+
+        $(`#result-${obj.id}`).on('click', editResult)
+
+    }
+
+	function editResult(){
+        var testid = $(this).data('testid')
+        var value = $(this).html()
+
+        $(this).unbind()
+        $(this).html(`<input class="result form-control" data-testid=${testid} id="test-${testid}" type="text" value="${value}">`)
+
+        $(`.result`).on('keyup', function(){
+            var testid = $(this).data('testid')
+            var saveBtn = $(`#save-${testid}`)
+            saveBtn.prop('disabled', false)
+
+        })
+
+    }
+
+    function saveUpdate(){
+        //console.log('Saved!')
+        var testid = $(this).data('testid')
+        var saveBtn = $(`#save-${testid}`)
+        var row = $(`.test-row-${testid}`)
+
+        saveBtn.prop('disabled', true)
+        row.css('opacity', "0.5")
+
+        var result = $(`#test-${testid}`).val()
+        var data = {'id':testid, 'result':result}
+        updateTestPOST(data)
+
+        setTimeout(function(){
+            row.css('opacity', '1')
+        }, 2000)
+
+
+    }
+
+
+    function deleteTest(){
+        var testid = $(this).data('testid')
+
+        var deleteBtn = $(`#delete-${testid}`)
+        var saveBtn = $(`#save-${testid}`)
+        var cancelBtn = $(`#cancel-${testid}`)
+        var confirmBtn = $(`#confirm-${testid}`)
+
+        deleteBtn.addClass('hidden')
+        saveBtn.addClass('hidden')
+
+        cancelBtn.removeClass('hidden')
+        confirmBtn.removeClass('hidden')
+    }
+
+    function cancelDeletion(){
+        var testid = $(this).data('testid')
+
+        var deleteBtn = $(`#delete-${testid}`)
+        var saveBtn = $(`#save-${testid}`)
+        var cancelBtn = $(`#cancel-${testid}`)
+        var confirmBtn = $(`#confirm-${testid}`)
+
+        deleteBtn.removeClass('hidden')
+        saveBtn.removeClass('hidden')
+
+        cancelBtn.addClass('hidden')
+        confirmBtn.addClass('hidden')
+
+    }
+
+    function confirmDeletion(){
+        var testid = $(this).data('testid')
+        var row = $(`.test-row-${testid}`)
+        row.remove()
+        var data = {'id':testid}
+        deleteTestPOST(data)
+
+    }
+</script>
+
+{% endblock %}

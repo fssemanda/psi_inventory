@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+{% include 'base/searchNav.html' %}
+    <div class="card">
+
+        <div class="card-body">
+            <form method="post">
+                {% include 'base/validationmessages.html' %}
+
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="">Old Engravement Number</label>
+                    {{myform.Ast_Tag_nbr}}
+                 </div>
+                 <div class="form-group">
+                    <label for="">Asset Tag Number</label>
+                    {{myform.AstNo}}
+                 </div>
+                <div class="form-group">
+                    <label for="">Serial Number</label>
+                    {{myform.Serial_No}}
+                 </div>
+               
+                 
+                <div class="form-group">
+                    <label for="">Description</label>
+                    {{myform.Ast_description}}
+                 </div>
+                <div class="form-group">
+                    <label for="">Asset Type</label>
+                    <select class="form-control form-control-sm col-sm-6 col col-md-6" name="Asset_Type" id='asset_type_id'>
+                        <option value="{{AssetObj.Asset_Type}}" selected>{{AssetObj.Asset_Type}}</option>
+                      {% for item in myform.Asset_Type %}
+                                {{item}}
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Model No</label>
+                        {{myform.Model_No}}
+                 </div>
+                <div class="form-group">
+                    <label for="">Project</label>
+                    <select class="form-control form-control-sm col-sm-6 col col-md-6" name="Project" id='project'>
+                        {% for item in myform.Project %}
+                                {{item}}
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Condition</label>
+                     <select class="form-control form-control-sm col-sm-6 col col-md-6" name="Asset_Condition" id='condition_id'>
+                        {% for item in myform.Asset_Condition %}
+                                {{item}}
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Status</label>
+                     <select class="form-control form-control-sm col-sm-6 col col-md-6" name="Asset_Status" id='asset_status'> 
+                        {% for item in myform.Asset_Status %}
+                        {{item}}
+                    {% endfor %}
+                    </select>
+                 </div>
+               
+                <div class="form-group">
+                    <label for="">Availability</label>
+                     <select class="form-control form-control-sm col-sm-6 col col-md-6" name="Availability" id='availability_id'>
+                        {% for item in myform.Availability%}
+                                {{item}}
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Location</label>
+                     <select class="form-control form-control-sm col-sm-6 col col-md-6" name="Location" id='location_id'>
+                        {% for item in myform.Location %}
+                                {{item}}
+                        {% endfor %}
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="">Purchase Date</label>
+                    
+                    {{myform.PurchaseDate}}
+                 </div>
+                <div class="form-group">
+                    <label for="">Item_Cost_UGX</label>
+                    {{myform.Item_Cost_UGX}}
+                </div>
+                <div class="form-group">
+                    <label for="">Item_Cost_USD </label>
+                   {{myform.Item_Cost_USD}}
+                </div>
+                <div class="form-group">
+                    <label for="">Supplier/Vendor</label>
+                    {{myform.Vendor}}
+                 </div>
+                 <div class="form-group">
+                    <label for="">Comments</label>
+                    {{myform.Comments}}
+                 </div>
+
+                <input type="submit" value="Save" class="btn btn-default btn-primary">
+
+            </form>
+
+        </div>
+
+
+    </div>
+{% endblock %}

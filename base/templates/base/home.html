@@ -1,0 +1,292 @@
+
+{% extends "base.html" %}
+{%load static %}
+{% load humanize %}
+{% block content %}
+
+    <div class="topmost-bar shadow-lg p-3 mb-5 rounded">
+        
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border whitee shadow-lg p-3 mb-5 rounded">
+
+                    <p class="card-subtitle mb-2 card__head">Total Number of Assets</p>
+
+
+                    <p style="font-weight:1000;" class="header__intro"> {{ inventory_count|intcomma }} Assets <span class="mr-3"> <ion-icon name="laptop-outline"></ion-icon></span></p>
+                   <span> <ion-icon name="trending-up-outline"></ion-icon></span>
+                </div>
+            </div>
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border aquaie shadow-lg p-3 mb-5 bg-body rounded ">
+
+                    <p class="card-subtitle mb-2 card__head">Total Asset Value</p>
+
+
+                    <p style="font-weight:1000;" class="header__intro">$ {{ Total|floatformat:2|intcomma }} &nbsp; <span class="mr-3"> <ion-icon name="trending-up-outline"></ion-icon></span></p>
+
+                </div>
+            </div>
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border whitee shadow-lg p-3 mb-5 rounded">
+
+                    <p class="card-subtitle mb-2 card__head" >Depreciated Value</p>
+
+
+                    <p style="font-weight:1000;" class="header__intro"> {{Total_Depreciation|floatformat:2|intcomma}}&nbsp; <span class="mr-3"> <ion-icon name="trending-down-outline"></ion-icon></span></p>
+
+                </div>
+            </div>
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border whitee">
+
+                     <p class="card-subtitle mb-2 card__head"><b>Assets Above 5 years</b></p>
+
+
+                    <p style="font-weight:1000;" class="header__intro"><b>{{ above_5years_count|intcomma }}</b></p>
+
+                </div>
+            </div>
+       
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border whitee">
+
+                     <p class="card-subtitle mb-2 card__head"><b>Asset Gap</b></p>
+
+
+                    <p style="font-weight:1000;" class="header__intro"><b>0</b></p>
+
+                </div>
+            </div>
+        
+    </div>
+    
+    {% comment %} <div class ="row"> {% endcomment %}
+        
+        <div class="row p-2 m-3">
+            {% comment %} <div class="col-md-4 ">
+                <div class="card">
+                    
+                    <div class=" card-body">
+                        <h6 class="mt-3 mb-3 text-success">Depreciation</h6>
+                        <canvas id="myChart" width="100" height="100"></canvas>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+            {% comment %} End of card 1 {% endcomment %}
+            <div class="col-sm-4 ">
+                <div class="container-fluid mb-3">
+                    <div class="card">
+                        <div class="card-body ">
+                            <h6 class="mt-3 mb-3 text-success">Notifications</h6>
+                            <div class="list-group">
+                                {% if Asset_Requests.count > 0 %}
+                                <a href = "" 
+                            class="list-group-item list-group-item-action btn btn-primary position-relative" 
+                            id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls="settings">
+                            <button type="button" class="btn position-relative green-color">
+                                Staff Asset Requests 
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{Asset_Requests.count}}</span></button>
+                                </a>
+                                
+                                {% else %}
+                                <a class="list-group-item list-group-item-action  " href="" >Pending Asset Request approvals <span class="badge badge-primary badge-pill">{{Asset_Requests.count}}</span></a>  
+                        
+                                {% endif %}
+                            {% if ModObjects > 0 %}
+                            <a href = "{% url 'approval_list' %}" class="list-group-item list-group-item-action btn btn-primary position-relative " >
+                            <button type="button" class="btn btn-primary position-relative">
+                                Pending Modification Approvals 
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ModObjects}}</span></button>
+                                </a>
+                                
+                                {% else %}
+                                <a class="list-group-item list-group-item-action "  href="{% url 'approval_list' %}" >Pending Modification Approvals <span class="badge badge-primary badge-pill">{{ModObjects}}</span></a>  
+                        
+                                {% endif %}
+                                {% if AssignmentDeletionObj > 0 %}
+                            <a href = "{% url 'withdraw-list' %}" 
+                            class="list-group-item list-group-item-action btn btn-primary position-relative " 
+                            href="">
+                            <button type="button" class="btn btn-primary position-relative">
+                                Asset Assignment Changes 
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{AssignmentDeletionObj}}</span></button>
+                                </a>
+                                
+                                {% else %}
+                                <a href="{% url 'withdraw-list' %}" class="list-group-item list-group-item-action " href="">Assignment Changes <span class="badge badge-primary badge-pill">{{AssignmentDeletionObj}}</span></a> 
+                        
+                                {% endif %}
+                            <a href="{% url 'crapprovallist' %}" class="list-group-item list-group-item-action "  href="" >Pending Disposal List Approvals <span class="badge badge-primary badge-pill">{{crApprovalObjects}}</span></a> 
+                            {% comment %} DIV End List Group {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-body p-3 mb-3">
+                            <h6 class="mt-3 mb-3 text-success">Staff Asset Allocation</h6>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class=" form-group col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" placeholder="Enter a Username" class="form-control form-control-md-4" name="uname" id="uname_id"/>
+                                        <span class="input-group-btn">
+                                            <button class="btn green-color" type="submit">Search</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                            <table class="table table-hover table-sm mt-3 table-bordered shadow-lg p-3 mb-5 rounded">
+                                <thead class="">
+                                    <tr class="thead-dark">
+                                        <th>Staff Name</th>
+                                        <th>Number of alloted Assets</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                    {% for i in page_obj %}
+            
+                                    <tr>
+                                        <td>{{i.Firstname}} {{i.Lastname}}</td>
+                                        <td>{{i.assignment_set.all.count}}</td>
+                                        <td><a class="btn green-color btn-sm text-white" href="{% url 'staff' i.Username%}">View</a></td>
+                                    </tr>
+                                    {% endfor %}
+                            </table>
+                    
+                            <div class="row pagination-container" id="pagination">
+                                <div class="col-md-10">
+                                    Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                                </div>
+                            <div class="align-right float-right mr-auto">
+                                    <ul class="pagination align-right float-right mr-auto">
+                                
+                                        {%  if page_obj.has_previous %}
+                                            <li {%  if page_obj.number == 1 %}  class="page-item active"  {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                                            <li class="page-item"><a class=page-link href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                                        {% endif %}
+                                        {%  if page_obj.has_next %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{page_obj.paginator.num_pages}} &raquo;</a></li>
+                                        {% endif %}
+                                
+                                        </ul>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                {% comment %} End of SM {% endcomment %}
+            </div>
+            <div class="col-sm-6 ">
+                
+                    <div class="container-fluid mb-3">
+                        <div class="card">
+                            <div class="card-body ">
+                                <h6 class='card-title text-success'>Asset Requests</h6>
+                                <table class="table table-hover table-sm table-bordered shadow-lg p-3 mb-5 rounded">
+                                    <thead class="">
+                                        <tr class="thead-light">
+                                        {% comment %} <th>Request ID</th> {% endcomment %}
+                                            <th>Staff Name</th>
+                                            <th>Device Type/Device</th>
+                                        {% comment %} <th>Reason</th> {% endcomment %}
+                                        {% comment %} <th>{{i.Username.Firstname}} </th> {% endcomment %}
+                                        {% comment %} {{i.Username.Lastname}}</td><th>Date Requested</th> {% endcomment %}
+                                        {% comment %} <th>`view</th> {% endcomment %}
+                                        {% comment %} <th>Reject</th> {% endcomment %}
+                    
+                                    </tr>
+                                </thead>
+                                {% for i in Asset_Requests %}
+                                    <tr>
+                                        {% comment %} <td>{{i.id}}</td> {% endcomment %}
+                                        <td>{{i.Username.Firstname}} 
+                                            {{i.Username.Lastname}}</td>
+                                        <td class=""><a class = "" href="{% url 'RQView' i.id %}">{{i.Device_Type}} {{i.Assigned_Device}}</a></td>
+                                        {% comment %} <td>{{i.Reason}}</td> {% endcomment %}
+                                        {% comment %} <td>{{i.Date_Requested}} </td> {% endcomment %}
+                                        {% comment %} <td><a class="btn-success btn-sm" href="{% url 'RQView' i.id %}">View</a></td> {% endcomment %}
+                                        {% comment %} <td><a class="btn-danger btn-sm" href="{% url 'reject' i.id %}">Reject</a></td> {% endcomment %}
+                    
+                                    </tr>
+                                    {% endfor %}
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} `container two` {% endcomment %}
+                    <div class="container-fluid mb-3">
+                        <div class="card">
+                            <div class="card-body ">
+                                <h6 class='card-title text-success'>Requests in Process</h6>
+                                <table class="table table-hover table-sm table-bordered shadow-lg p-3 mb-5 rounded"">
+                                    <thead class="">
+                                        <tr class="thead-dark">
+                                            
+                                            <th>Requested By</th>
+                                           
+                                            
+                                            <th>Assigned_Device</th>
+                    
+                                            <th>Device Type</th>
+                                             <th>Status</th>
+                                            <th>Approval Stage</th>
+                                            {% comment %} <th>Stage 2</th>
+                                            <th>State 3</th> {% endcomment %}
+                                            {% comment %} <th>Date Modified</th> {% endcomment %}
+                                            
+                    
+                                        </tr>
+                                    </thead>
+                                    {% for i in processing %}
+                                        <tr>
+                                            {% comment %} <td>{{i.id}}</td> {% endcomment %}
+                                            <td>{{i.Username.Firstname}} 
+                                        {{i.Username.Lastname}}</td>
+                                            <td>{{i.Assigned_Device}}</td>
+                                            <td>{{i.Device_Type}}</td>
+                                            <td>{{i.Status}}</td>
+                                            {%if i.AssetManagerApproval == "Approved" and i.SupervisorApproval == "Pending"%}
+                    
+                                            <td>Supervisor Approval </td>
+                                            {% elif i.SupervisorApproval == "Approved" and  i.FinanceManagerApproval == "Pending" %}
+                                            <td>Finance Approval </td>
+                                            {% elif i.FinanceManagerApproval == "Approved" %}
+                                            <td>No Action </td>
+                                            {% endif %}
+                                            {% comment %} <td>{{i.Last_Modified}} </td> {% endcomment %}
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                                
+            </div>
+
+
+        {% comment %} </div> {% endcomment %}
+             
+{% comment %} Close row {% endcomment %}
+</div>
+{% comment %} close Container {% endcomment %}
+</div>
+
+
+
+{% endblock %}
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="{% static 'js/depreciation.js' %}"></script>
+{% endblock scripts %}

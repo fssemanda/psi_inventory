@@ -1,0 +1,474 @@
+import csv
+import datetime
+import json
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models.query import QuerySet
+from django.forms.models import inlineformset_factory, modelform_factory
+from django.shortcuts import render, redirect
+from django.forms import inlineformset_factory, modelform_factory
+# Create your views here.
+from .forms import RqForm, FileUploadForm, AssignmentForm
+from home.models import *
+from home.logindecorators import *
+from django.views.generic import ListView
+from django.core.paginator import Paginator
+
+
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
+
+
+@login_required(login_url='login')
+# @allowed_users(allowed_roles=['Systems Administrator'])
+def assetsview(request):
+    myassets = AssetTb.objects.all().order_by('-PurchaseDate', '-Ast_Tag_nbr')
+
+    #Changing Asset Availability to Not-Assigned for all Assets
+
+    # for item in myassets:
+    #     item.Availability = "Not Assigned"
+    #     item.save()
+    # # employee = staff.objects.get(Username="macho.francis")
+    count = []
+    start = 0
+    for tag in myassets:
+        if tag.Item_Cost_USD > 950:
+            start += 1
+            count.append(1)
+    above = sum(count)
+
+    paginator = Paginator(myassets, 12)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator, page_number)
+
+    # Need to convert date object in returned values as a serializable value othwerwise get error Json cannot serialize date
+
+    qs_json = json.dumps(list(AssetTb.objects.values()), default=myconverter)
+
+    context = {'assets': myassets, 'above': above, 'qs_json': qs_json, 'page_obj': page_obj}
+
+    # employee = staff.objects.all()
+    #
+    # qs_json = json.dumps(list(staff.objects.values()),default=myconverter)
+    # context = {'employee':employee , 'qs_json': qs_json}
+
+    return render(request, "base/listing.html", context)
+
+
+@login_required(login_url='login')
+def AssetRequest(request):
+
+    pooleddevices = AssetTb.objects.filter(Availability="Available")
+
+    # requestFormSet = inlineformset_factory(staff, AssetRequest, fields=(
+        # can_delete = False)
+    requester = request.user.staff.Username
+    print(requester)
+    staffobj = staff.objects.get(Username=requester)
+    myform = RqForm(initial={'Username': staffobj})
+   
+    #Need to find a way of having the form have not displaying the Username so that form can be saved and username 
+    #picked automatically
+   
+    if request.method == 'POST':
+        #myform = RqForm(request.POST, instance=staffobj)
+        myform = RqForm(request.POST)
+        if myform.is_valid():
+            
+            #myform.Username = requester
+           #print(myform.Username)
+            myform.save()
+
+            return redirect('/')
+        else:
+            print('Form has errors')
+    #else:
+        #myform = RqForm()
+        #myform = RqForm(instance=staffobj)
+        #myform = RqForm(initial={'Username': staffobj})
+
+    context = {'myform': myform, "pooleddevices":pooleddevices}
+
+    return render(request, "base/Asset_Request.html", context)
+
+
+def asset_add(request):
+    AssetObj = AssetTb.objects.all()
+    response = ""
+    if request.method == 'POST':
+
+        Ast_Tag_number = request.POST.get('Ast_Tag_nbr')
+        Serial_Number = request.POST.get('Serial_No')
+        Lawson_Asset_Number = request.POST.get('Lawson_Asset_No')
+        Asset_description = request.POST.get('Ast_description')
+        UGX = request.POST.get('Item_Cost_UGX')
+        USD = request.POST.get('Item_Cost_USD')
+        Type = request.POST.get('Asset_Type')
+        Model_Number = request.POST.get('Model_No')
+        ProjectCode = request.POST.get('Project')
+        Condition = request.POST.get('Asset_Condition')
+        Status = request.POST.get('Asset_Status')
+        ProjectName = request.POST.get('Project_Name')
+        # Username = staffobj,
+        Available = request.POST.get('Availability')
+        location = request.POST.get('Location')
+        purchaseDate = request.POST.get('PurchaseDate')
+
+        print(purchaseDate)
+
+        if not Ast_Tag_number:
+            messages.info(request, "Asset Engravement Number is Required")
+        if not UGX or not USD:
+            messages.error(request, "Enter Asset Cost in Either USD or UGX Sections")
+        if not Type:
+            messages.error(request, "Asset Type is required")
+        if not Model_Number:
+            messages.error(request, "Model number is required")
+        if not request.POST.get('PurchaseDate'):
+            messages.error(request, "Date of Purchase is required")
+
+        try:
+
+            AssetTb.objects.create(
+                Ast_Tag_nbr=Ast_Tag_number,
+                Serial_No=Serial_Number,
+                Lawson_Asset_No=Lawson_Asset_Number,
+                Ast_description=Asset_description,
+                Item_Cost_UGX=UGX,
+                Item_Cost_USD=USD,
+                Asset_Type=Type,
+                Model_No=Model_Number,
+                Project=ProjectCode,
+                Asset_Condition=Condition,
+                Asset_Status=Status,
+                Project_Name=ProjectName,
+                # Username = staffobj,
+                Availability=Available,
+                Location=location,
+                PurchaseDate=purchaseDate
+            )
+            messages.info(request, f'Asset {Ast_Tag_number} has been added successfully')
+        except:
+            ValueError()
+            messages.info(request, f'Asset {Ast_Tag_number} could not be added. Contact Systems Administrator')
+
+    context = {'AssetObj': AssetObj, "response": response, 'values': request.POST, }
+
+    return render(request, "base/add_asset.html", context)
+
+
+@login_required(login_url='login')
+def AssetRequestView(request, pk):
+    AssetObj = AssetRequests.objects.get(id=pk)
+
+    myform = RqForm(instance=AssetObj)
+
+    if request.method == 'POST':
+        myform = RqForm(request.POST, instance=AssetObj)
+        if myform.is_valid():
+            myform.save()
+            return redirect('/')
+
+    context = {'myform': myform}
+
+    return render(request, "base/Asset_Request.html", context)
+
+
+@login_required(login_url='login')
+def Reject(request, pk):
+    AssetObj = AssetRequests.objects.get(id=pk)
+
+    if request.method == 'POST':
+        AssetObj.delete()
+        return redirect('/')
+
+    context = {'Asset': AssetObj}
+
+    return render(request, "base/delete.html", context)
+
+
+@login_required(login_url='login')
+def editItem(request, pk):
+    AssetObj = AssetTb.objects.get(Ast_Tag_nbr=pk)
+    Obj = AssetTb.objects.all()
+
+    if request.method == 'POST':
+        Ast_Tag_number = request.POST.get('Ast_Tag_nbr')
+        Serial_Number = request.POST.get('Serial_No')
+        Lawson_Asset_Number = request.POST.get('Lawson_Asset_No')
+        Asset_description = request.POST.get('Ast_description')
+        UGX = request.POST.get('Item_Cost_UGX')
+        USD = request.POST.get('Item_Cost_USD')
+        Type = request.POST.get('Asset_Type')
+        Model_Number = request.POST.get('Model_No')
+        ProjectCode = request.POST.get('Project')
+        Condition = request.POST.get('Asset_Condition')
+        Status = request.POST.get('Asset_Status')
+        ProjectName = request.POST.get('Project_Name')
+        # Username = staffobj,
+        Available = request.POST.get('Availability')
+        location = request.POST.get('Location')
+        purchaseDate = request.POST.get('PurchaseDate')
+
+        print(purchaseDate)
+
+        if not Ast_Tag_number:
+            messages.info(request, "Asset Engravement Number is Required")
+        if not UGX or not USD:
+            messages.error(request, "Enter Asset Cost in Either USD or UGX Sections")
+        if not Type:
+            messages.error(request, "Asset Type is required")
+        if not Model_Number:
+            messages.error(request, "Model number is required")
+        if not request.POST.get('PurchaseDate'):
+            messages.error(request, "Date of Purchase is required")
+
+        try:
+            AssetObj.Ast_Tag_nbr = Ast_Tag_number
+            AssetObj.Serial_No = Serial_Number
+            AssetObj.Lawson_Asset_No = Lawson_Asset_Number
+            AssetObj.Ast_description = Asset_description
+            AssetObj.Item_Cost_UGX = UGX
+            AssetObj.Item_Cost_USD = USD
+            AssetObj.Asset_Type = Type
+            AssetObj.Model_No = Model_Number
+            AssetObj.Project = ProjectCode
+            AssetObj.Asset_Condition = Condition
+            AssetObj.Asset_Status = Status
+            AssetObj.Project_Name = ProjectName
+            # Username = staffobj
+            AssetObj.Availability = Available
+            AssetObj.Location = location
+            AssetObj.PurchaseDate = purchaseDate
+
+            AssetObj.save()
+
+            messages.success(request, f'Asset {Ast_Tag_number} has been saved successfully')
+
+            return redirect('view_assets')
+        except:
+            ValueError()
+            messages.info(request, f'Asset {Ast_Tag_number} could not be updated. Contact Systems Administrator')
+            return redirect('/edit-item/' + Ast_Tag_number)
+
+    context = {'values': AssetObj, 'Obj': Obj}
+
+    return render(request, "base/itemedit.html", context)
+
+
+def Fileupload(request):
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            obj = CsvUpload.objects.get(Parsed=False)
+            with open(obj.file_name.path, 'r') as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    UGX_value = row[4]
+                    UGX_value = UGX_value.replace(",", "")
+                    UGX_value = float(UGX_value)
+
+                    USD_value = row[5]
+                    USD_value = USD_value.replace(",", "")
+                    USD_value = float(USD_value)
+
+                    # The date split it via / then tuple unpack it and compose a new string i required structure.
+
+                    DateFormat = row[15]
+
+                    DateFormat1 = DateFormat.split('/')
+                    print(DateFormat1)
+                    NewDate = "-".join([DateFormat1[2], DateFormat1[0],
+                                        DateFormat1[1]])
+
+                    print(NewDate)
+
+                    # staffobj = staff.objects.get(Username='kakooza')
+
+                    # AssetNo = AssetTb.objects.filter(Ast_Tag_nbr=row[0])
+
+                    # print(AssetNo)
+
+                    # if AssetNo is not None:
+                    if AssetTb.objects.filter(Ast_Tag_nbr=row[0]).exists():
+                        continue
+                    else:
+                        AssetTb.objects.create(
+                            Ast_Tag_nbr=row[0],
+                            Serial_No=row[1],
+                            Lawson_Asset_No=row[2],
+                            Ast_description=row[3],
+                            Item_Cost_UGX=UGX_value,
+                            Item_Cost_USD=USD_value,
+                            Asset_Type=row[6],
+                            Model_No=row[7],
+                            Project=row[8],
+                            Asset_Condition=row[9],
+                            Asset_Status=row[10],
+                            Project_Name=row[11],
+                            # Username = staffobj,
+                            Availability=row[13],
+                            Location=row[14],
+                            PurchaseDate=NewDate
+
+                        )
+
+                    # print(row[4])
+                    # print(type(row[4]))
+
+                    # print(type(value))
+                obj.Parsed = True
+                obj.save()
+    else:
+        form = FileUploadForm()
+
+    context = {'form': form}
+
+    return render(request, 'base/upload.html', context)
+
+
+@login_required(login_url='login')
+def deleteItem(request, pk):
+    AssetObj = AssetTb.objects.get(Ast_Tag_nbr=pk)
+    No = AssetObj.Ast_Tag_nbr
+    AssetObj.delete()
+    messages.success(request, f'Asset {No} has been deleted successfully')
+
+    return redirect('view_assets')
+
+
+@login_required(login_url='login')
+class itemsView(ListView):
+    model = AssetTb
+    template_name = 'base/listing.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["qs_json"] = json.dumps(list(AssetTb.objects.values()))
+        return context
+
+
+def auctionList(request):
+    Mylist = AssetTb.objects.all()
+
+    qs_json = json.dumps(list(AssetTb.objects.values()), default=myconverter)
+    context = {'Mylist': Mylist, 'qs_json': qs_json}
+
+    return render(request, 'base/AuctionList.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Admin', 'Finance', 'IT'])
+def assetAssignment(request):
+    # Assignedassets = AssetTb.objects.filter(Availability="Assigned")
+    All_Assigned_devices = Assignment.objects.all().order_by('-Username', '-Ast_Tag_nbr')
+    Num_assigned = All_Assigned_devices.count()
+
+    paginator = Paginator(All_Assigned_devices, 2)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator, page_number)
+
+    context = {"All_Assigned_devices":All_Assigned_devices, "Num_assigned":Num_assigned, 'page_obj':page_obj}
+    return render(request, 'base/assetassignment.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Admin', 'Finance', 'IT'])
+def assign_asset(request, pk):
+    newpk = pk.strip()
+    print(newpk)
+    AssignObj = AssetTb.objects.get(Ast_Tag_nbr=newpk)
+
+
+    myAssignmentForm = AssignmentForm(instance=AssignObj)
+
+    #CurrentAssignment = AssignObj.objects.get(Ast_Tag_nbr=newpk)
+
+    if request.method == 'POST':
+        try:
+            myAssignmentForm = AssignmentForm(request.POST)
+            if myAssignmentForm.is_valid():
+                myAssignmentForm.save()
+            else:
+                try:
+                    Assigned_devices = Assignment.objects.get(Ast_Tag_nbr=newpk)
+                    messages.error(request,
+                                   f"Asset Cannot be Assigned twice. Asset is currently assigned to {Assigned_devices.Username}")
+                    return redirect('view_assets')
+                except LookupError as e:
+                    print(e)
+        except Exception as e:
+            messages.error(request,
+                           f"Asset Can be Assigned twice. Asset is currently assigned")
+            print(e)
+
+
+    context = {"myAssignmentForm": myAssignmentForm, "AssignObj": AssignObj, }
+    return render(request, 'base/assign.html', context)
+
+
+def assign_device(request):
+
+
+    # if request.method == "POST":
+    #     Username = request.POST.get('Username')
+    #     Asset_No = request.POST.get('Ast_Tag_nbr')
+    #
+    #     AssignObj = AssetTb.objects.get(Ast_Tag_nbr=Asset_No)
+    #
+    #     Assignment.objects.create(
+    #         Username = Username,
+    #         Ast_Tag_nbr = Asset_No
+    #     )
+    #
+    #
+    #
+    # print(AssignObj.Ast_Tag_nbr)
+    #
+    # Assignments = Assignment.objects.all()
+    # #
+    # #myAssignmentForm = AssignmentForm(instance=AssignObj)
+    # #
+    # ##   print(AssignObj)
+    #
+    # # context = { "AssignObj":AssignObj}"Assignments":Assignments
+    # context = {"myAssignmentForm": myAssignmentForm, "AssignObj": AssignObj, }
+    return render(request, 'base/assign.html',)
+
+def pool_equip_request(request, pk):
+    assetRqObj = AssetTb.objects.get(Ast_Tag_nbr = pk)
+    staffobj =  staff.objects.get(Username = request.user)
+    print(staffobj)
+    #myform = RqForm(initial={'Username': staffobj})
+   
+    form =  RqForm(instance=assetRqObj)
+
+    if request.method == 'POST':
+        Ast_Tag_nbr = request.POST.get("Ast_Tag_nbr")
+        Reason = request.POST.get("Reason")
+
+        AssetRequests.objects.create(
+            Assigned_Device = assetRqObj,
+            Device_Type = assetRqObj.Asset_Type,
+            #Status = ,
+            Username = staffobj,
+            Reason = Reason,
+        )
+        
+        messages.success(request, "Your Request for a pool device has been placed "\
+                            "successfully. Wait for a confirmation Email to pick Equipment")
+        return redirect('AssetRQ')
+
+        form = RqForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    context = {'assetRqObj':assetRqObj, 'form':form}
+
+    return render(request, 'base/assetpool.html', context)
+
+

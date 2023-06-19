@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+{% include 'base/searchNav.html' %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="myChart" width="100" height="100"></canvas>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-body no-border blueie">
+
+                        <p class="card-subtitle mb-2 card__head">Total Number of Assets</p>
+
+
+                        <p style="font-weight:1000;" class="header__intro"> {{ inventory_count|intcomma }} Assets</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="{% static 'js/stats.js' %}"></script>
+
+{% endblock scripts %}
+
+

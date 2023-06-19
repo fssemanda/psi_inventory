@@ -1,0 +1,63 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "base/requisitions_status.html" %}
+<div class="row">
+            <div class="col-md-3">
+            <div class="card text center text-black mb-3" >
+                <div class="card-header">
+                    <h5 class="card-title">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <p><a class="btn btn-outline-info btn-md" href="# ">Create New Requistion</a></p>
+                    <p><a class="btn btn-outline-info btn-md" href="#">Update Requester Details</a></p>
+
+                </div>
+
+
+             </div>
+
+             </div>
+
+        <div class="col-md">
+            <div class="card-header">
+                    <h5 class="card-title">Previous Requisitions</h5>
+                </div>
+            <div class="card card-body">
+
+                    <table class="table table-sm">
+                        <tr>
+
+                            <th>Batch No</th>
+                            <th>Product Name</th>
+
+                            <th>Description</th>
+                            <th>Quantity</th>
+
+                            <th>Date Requested</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                            <th>Remove</th>
+                        </tr>
+                         {% for i in requisitions %}
+                             <tr>
+
+                                <td>{{i.itemid}}</td>
+                                <td>{{i.ProductName}}</td>
+                                <td>{{i.description}}</td>
+                                <td>{{i.quantity}}</td>
+                                <td>{{i.request_date}}</td>
+                                <td>{{i.status}}</td>
+                                <td><a class="btn-success btn-sm" href="">Update</a></td>
+                                <td><a class="btn-danger btn-sm" href="">Remove</a></td>
+
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                </div>
+        </div>
+
+    </div>
+{% endblock  %}

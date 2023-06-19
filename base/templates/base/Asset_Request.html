@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="card card-body">
+            <h1 class="h3">Available Assets</h1>
+            {% include 'base/validationmessages.html' %}
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="row"><p></p></div>
+                <div class="card">
+                        <div class=" card-header">
+                         <h5 class="">Request for Pool Device</h5>
+                        </div>
+                    <div class="card-body">
+                        
+                            <table id="box" class="table table-hover table table-responsive table-sm">
+                                <thead class="thead">
+                                    <tr>
+                                        <th scope="row">Engraved Number</th>
+                                        <th scope="row">Serial</th>
+                                        <th scope="row">Model Number</th>
+                    
+                                        
+                                        <th scope="row">Type</th>
+                                        <th scope="row">Condition</th>
+                                        <th scope="row">Availability</th>
+                                        
+                                        <th scope="row">Actions</th>
+                                        
+                                    </tr>
+                                </thead>
+                                {% for item in pooleddevices %}
+                                    <tr >
+                    
+                                        <td><a href="{% url 'assetdetails' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+                                        <td>{{item.Serial_No}}</td>
+                                        <td>{{item.Model_No}}</td>
+                    
+                                        
+                                        <td>{{item.Asset_Type}}</td>
+                                        <td>{{item.Asset_Condition}}</td>
+                                        <td>{{item.Availability}}</td>
+                                       
+                                        
+                                       
+                                        <td><a class="btn-success btn-sm" href="{% url 'approval-request' item.Ast_Tag_nbr %}">Request</a></td>
+                                        
+                    
+                    
+                                    </tr>
+                                      {% endfor %}
+                            </table>
+                    
+                </div>
+        </div></div>
+
+        <div class="col-md-6">
+            <div class="row"><p></p></div>
+                <div class="card">
+                        <div class=" card-header">
+                         <h5 class="">Request for Permanent work tool</h5>
+                        </div>
+                    <div class="card-body">
+                        <form action="#" method="POST">
+                        {% csrf_token %}
+
+                        {{myform}}
+
+                        <input type="Submit" class="btn btn-sm btn-info" name="Submit" role="Submit" value="Request">
+                        </form>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock %}

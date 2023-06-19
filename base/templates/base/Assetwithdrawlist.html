@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Modification Approvals</li>
+          </ol>
+        </nav>
+    </div>
+    <div class="col-md-2">
+        
+    </div>
+</div>
+
+<div class="row">
+    <p></p>
+</div>
+<div class="container-fluid">
+
+
+    <div class="row"></div>
+
+    <div class="row">
+        <p></p>
+    </div>
+    <div class="row">
+    <div class="col-md-4">
+
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Type here to Search" id="searchHere">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Search</button>
+      </span>
+    </div>
+
+
+
+
+    </div>
+
+</div>
+ <div class="row">
+        <p></p>
+    </div>
+
+
+    <div class="card card-body">
+        <h1 class="h3">Withdraw Requests</h1>
+        {% include 'base/validationmessages.html' %}
+    </div>
+    <div class="original-table">
+        <table id="box" class="table table-hover table-bordered table table-responsive table-sm">
+            <thead class="thead">
+                <tr>
+                    <th scope="row">Assignment ID</th>
+                    <th scope="row">Current User</th>
+                    <th scope="row">Serial</th>
+                    
+
+<!--                    <th scope="row">Delete</th>-->
+                </tr>
+            </thead>
+            {% for item in DeleteAssignmentObj %}
+                <tr >
+                    <td><a href="{% url 'withdraw' item.id %}">{{item.AssignmentID.id}}</a></td>
+                    <td><a href="">{{item.AssignmentID.Username.Firstname}} {{item.AssignmentID.Username.Lastname}}</a></td>
+                   
+                    <td>{{item.AssignmentID.Ast_Tag_nbr}}</td>
+                   
+                    
+
+                    
+             
+
+
+                </tr>
+                  {% endfor %}
+        </table>
+    </div>
+
+
+
+    <div class="row pagination-container" id="pagination">
+        <div class="col-md-10">
+            Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+        </div>
+        <div class="align-right float-right mr-auto">
+            <ul class="pagination align-right float-right mr-auto">
+        
+                {%  if page_obj.has_previous %}
+                    <li {%  if page_obj.number == 1 %}  class="page-item active"  {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                    <li class="page-item"><a class=page-link href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {%  if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{page_obj.paginator.num_pages}} &raquo;</a></li>
+                {% endif %}
+        
+                </ul>
+        </div>
+        </div>
+
+</div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/searchData.js' %}"></script>
+{% endblock scripts %}

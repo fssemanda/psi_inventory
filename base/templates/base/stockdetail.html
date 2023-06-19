@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load humanize %}
+<div class="container-sm">
+<div class="card card-body bg-primary text-light text-bold">
+    <h5 class="card-title ">Asset Details: {{AssetObj.Asset_Type}}</h5>
+</div>
+<div class="card card-body border-0">
+   <table class="table table-bordered table-hover">
+
+
+
+        
+        <tr>
+            <td class="bg-light text-secondary text-md">Asset Number</td><td><b>{{AssetObj.Ast_Tag_nbr}}</b></td><td class="bg-light text-secondary">Serial  Number</td><td><b>{{AssetObj.Serial_No}}</b></td>
+        </tr>
+        
+      
+        <tr>
+            <td class="bg-light text-secondary">Asset QR Number</td><td ><b>{{AssetObj.AstNo}}</b></td><td class="bg-light text-secondary">Asset Description</td><td class="font-weight-bold">{{AssetObj.Ast_description}}</td>
+        </tr>
+        <tr>
+            <td class="bg-light text-secondary text-md">Model </td><td><b>{{AssetObj.Ast_Tag_nbr}}</b></td><td class="bg-light text-secondary">Availabilty</td><td><b>{{AssetObj.Availability}}</b></td>
+        </tr>
+       <tr>
+        <td class="bg-light text-secondary ">Asset Type</td><td class="font-weight-bold">{{AssetObj.Asset_Type}}</td><td class="bg-light text-secondary">Date of Purchase</td><td class="font-weight-bold">{{AssetObj.PurchaseDate}}</td>
+        </tr>
+      
+       <tr>
+        <td class="bg-light text-secondary">Cost ($) </td><td class="font-weight-bold">{{AssetObj.Item_Cost_USD|intcomma}}</td><td class="bg-light text-secondary">Cost (UGX)</td><td class="font-weight-bold">{{AssetObj.Item_Cost_UGX|intcomma}}</td>
+        </tr>
+    
+       <tr>
+        <td class="bg-light text-secondary">Location</td><td class="font-weight-bold">{{AssetObj.Location}}</td><td class="bg-light text-secondary">Asset Condition</td><td class="font-weight-bold"></td>
+        </tr>
+        <tr>
+            <td class="bg-light text-secondary">Supplier</td><td class="font-weight-bold">{{AssetObj.Vendor}}</td><td class="bg-light text-secondary">Asset Status</td><td class="font-weight-bold">{{AssetObj.Asset_Status}}</td>
+            </tr>
+            <tr>
+                <td class="bg-light text-secondary">Project Name</td><td class="font-weight-bold">{{AssetObj.Project_Name}}</td><td class="bg-light text-secondary">Condition</td><td class="font-weight-bold">{{AssetObj.Asset_Condition}}</td>
+                </tr>
+                <tr>
+                    <td class="bg-light text-secondary">Project Code</td><td class="font-weight-bold">{{AssetObj.Project}}</td><td class="bg-light text-secondary">Comments</td><td class="font-weight-bold">{{AssetObj.Comments}}</td>
+                    </tr>
+      
+
+       <tr>
+           <td class="bg-primary "><a href="{% url 'edit_item' AssetObj.Ast_Tag_nbr %}" class=" btn text-decoration-none text-light">Edit Asset</a></td>
+           <td class="bg-secondary"><a href="{% url 'assign' AssetObj.Ast_Tag_nbr %}" class=" btn text-decoration-none text-light">Reassign</a></td>
+           <td class="bg-danger"><a href="{% url 'dispose' AssetObj.Ast_Tag_nbr%}" class=" btn text-decoration-none text-light">Mark for Disposal</a></td>
+           <td class="bg-info"><a href="{% url 'view_assets' %}" class=" btn text-decoration-none text-light">Back</a></td><tr>
+           
+       </tr></td>
+        </tr>
+
+
+
+    </table>
+
+</div>
+<div class="card card-body col-4 mt-3">
+    <p class="card-subtitle mb-2 text-black">Asset Currently Assigned to:</p>
+    {% if Current_User %}
+    <p style="font-weight:1000;" class="header__intro"> {{Current_User.Username.Firstname}}  {{Current_User.Username.Lastname}}</p>
+    {% endif %}
+    {% if request.user.staff.staffrole == "Admin" or request.user.staff.staffrole == "Systems Administrator" or request.user.staff.staffrole == "IT Support Assistant" or request.user.staff.staffrole == "Asset Manager" or request.user.staff.staffrole == "Assistant Accountant-Treasury" %}
+    {% if  Current_User %}
+    <p><a class="btn btn-md btn-danger" href="{% url 'withdraw-item' Current_User.id %}">Withdraw Asset</a></p>
+    {% endif %}
+    {% endif %}
+</div>
+</div>
+
+{% endblock %}
+

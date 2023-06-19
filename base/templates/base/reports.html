@@ -1,0 +1,465 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Reports</li>
+                    </ol>
+                </nav>
+            </div>
+
+        </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Assigned Assets</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a href="{% url 'reports_all' %}"><button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">All Assets</button>
+      </a></li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Custom Reports</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+
+          <div class="card border-0">
+           <div class="card-body border-0">
+                <form method = "POST">
+                    {% csrf_token %}
+                    <div class="row col-md-12">
+                        <div class="form-group col-md-3">
+
+                                <label for="searchName">Asset Engravement Number</label>
+                                <input class="form-control" type="search" id="searchName" name="search_name" placeholder="Asset Engravement number" value="{{myvalues.AstNbr}}" id="Username_id"/>
+
+                        </div>
+                        <div class="form-group col-md-3">
+
+                                <!-- <label for="searchName">Asset Engravement Number</label> -->
+
+                                <label for="">Asset Type</label>
+                                <select class="form-control" name="Asset_Type" id='asset_type_id'>
+                                  {% for item in myform.Asset_Type %}
+                                            {{item}}
+                                    {% endfor %}
+                                </select>
+
+
+                        </div>
+                        <div class="form-group col-md-3">
+
+
+                                <label for="Project_Name">Project Name</label>
+                             <select class="form-control" name="Project_Name" id='project_name_id' placeholder="Project">
+                                {% for item in myform.Project_Name %}
+                                    {{item}}
+                                {% endfor %}
+                            </select>
+
+
+
+                        </div>
+                        <div class="form-group col-md-3">
+
+                                <label for="">Condition</label>
+                             <select class="form-control" name="Asset_Condition" id='condition_id'>
+                                {% for item in myform.Asset_Condition %}
+                                        {{item}}
+                                {% endfor %}
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-md-3">
+                            <label for="">Status</label>
+                             <select class="form-control " name="Asset_Status" id='asset_status'>
+                                {% for item in myform.Asset_Status %}
+                                {{item}}
+                            {% endfor %}
+                            </select>
+                         </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="">Availability</label>
+                             <select class="form-control " name="Availability" id='availability_id'>
+                                {% for item in myform.Availability%}
+                                        {{item}}
+                                {% endfor %}
+                            </select>
+                         </div>
+                        <div class="form-group col-md-3">
+                            <label for="">Location</label>
+                             <select class="form-control " name="Location" id='location_id'>
+                                {% for item in myform.Location %}
+                                        {{item}}
+                                {% endfor %}
+                            </select>
+                         </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="">Supplier/Vendor</label>
+                            <input type="text" id="vendor_id" name="vendor" class="form-control"/>
+                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="mincost">Minimum unit cost</label>
+                            <div class="input-group">
+                                <input type="number" id="mincost" name="minimum_cost" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="maxcost">Maximum unit cost</label>
+                            <div class="input-group">
+                                <input type="number" id="maxcost" name="maximum_cost" class="form-control" value="{{myvalues.maximum_cost}}"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="fromdate">From</label>
+                            <div class="input-group">
+                                <input type="date" id="fromdate" name="from_date" class="form-control" value="{{myvalues.from_date}}">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="todate">To</label>
+                            <div class="input-group">
+                                <input type="date" id="todate" name="to_date" class="form-control" value="{{myvalues.to_date}}"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="aging">Older than:</label>
+                            <div class="input-group">
+                                <input type="number" id="aging" name="age class="form-control""/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" value="" class="btn btn-success btn-md" name="findme">
+                        <ion-icon name="search-outline"  class="nav__icon"></ion-icon>
+                        <span>
+                            Search
+                            </span>
+                        </button>
+
+                        <button type="submit" value="excel" class="btn btn-secondary btn-md" name="excel">
+                            <ion-icon name="download-outline"  class="nav__icon"></ion-icon>
+                            <span>
+                                Export to Excel
+                                </span>
+                            </button>
+
+                            <button type="submit" value="pdf" class="btn btn-Danger btn-md" name="pdf">
+                                <ion-icon name="download-outline"  class="nav__icon"></ion-icon>
+                                <span>
+                                    Export to PDF
+                                    </span>
+                                </button>
+
+
+                    <!-- <input type="submit" value="PDF" class="btn btn-success btn-md"> -->
+
+                </form>
+            </div>
+       </div>
+        <div class="card card-body">
+             {% include 'base/validationmessages.html' %}
+        </div>
+           <div class="card border-0">
+               <div class="card-body">
+
+                <div class="original-table">
+                                <table id="box" class="table table-hover table table-responsive table-sm">
+                        <thead class="thead">
+                            <tr>
+
+                                <th scope="row">Staff Name</th>
+                                <th scope="row">Location</th>
+
+                                <th scope="row">Engraved Number</th>
+                                <th scope="row">Asset Tag Number</th>
+                                <th scope="row">Serial</th>
+                                <th scope="row">Model Number</th>
+
+
+                                <th scope="row">Type</th>
+                                <th scope="row">Condition</th>
+                                <th scope="row">Availability</th>
+                                <th scope="row">Status</th>
+                                <th scope="row">Purchase Date</th>
+                                <th scope="row">Cost (UGX)</th>
+                                <th scope="row">Cost (USD)</th>
+                                <th scope="row">Donor Project Code</th>
+                                <th scope="row">Donor Project</th>
+                                <!-- <th scope="row" rowspan="3">Actions</th> -->
+            <!--                    <th scope="row">Delete</th>-->
+                            </tr>
+                        </thead>
+                        {% for item in queryObj %}
+                            <tr >
+                                <td>{{item.Username.Firstname}} {{item.Username.Lastname}}</td>
+                                <!-- <td>{{item.assignment_set.get.Username}} {{item.Assignment.Username.Lastname}}</td> -->
+                                <td>{{item.Ast_Tag_nbr.Location}}</td>
+                                <td><a href="{% url 'assetdetails' item.Ast_Tag_nbr%}">{{item.Ast_Tag_nbr}}</a></td>
+                                <td>{{item.Ast_Tag_nbr.AstNo}}</td>
+                                <td>{{item.Ast_Tag_nbr.Serial_No}}</td>
+                                <td>{{item.Ast_Tag_nbr.Model_No}}</td>
+
+
+                                <td>{{item.Ast_Tag_nbr.Asset_Type}}</td>
+                                <td>{{item.Ast_Tag_nbr.Asset_Condition}}</td>
+                                <td>{{item.Ast_Tag_nbr.Availability}}</td>
+                                <td>{{item.Asset_Status}}</td>
+                                <td>{{item.Ast_Tag_nbr.PurchaseDate}}</td>
+                                <td>{{item.Ast_Tag_nbr.Item_Cost_UGX|floatformat:2|intcomma}}</td>
+                                <td>{{item.Ast_Tag_nbr.Item_Cost_USD|floatformat:2|intcomma}}</td>
+                                <td>{{item.Ast_Tag_nbr.Project}}</td>
+                                <td>{{item.Ast_Tag_nbr.Project_Name}}</td>
+                                <!-- <td><a class="btn-success btn-sm" href="{% url 'edit_item' item.Ast_Tag_nbr %}">Edit</a></td>
+                                <td><a class="btn-success btn-sm" href="{% url 'assign' item.Ast_Tag_nbr %}">Assign</a></td>
+                                    <td><a class="btn-danger btn-sm" href="{% url 'delete-item' item.Ast_Tag_nbr %}">Delete</a></td> -->
+
+
+
+                            </tr>
+                              {% endfor %}
+                    </table>
+                </div>
+               </div>
+           </div>
+      </div>
+
+
+     
+      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+          <div class="card border-0 text center mb-5 p-3">
+              <div card-body>
+
+                        <h5 class="card-title mt-3">Device allocation summaries</h5>
+                  <div class="row">
+                    <div class="col-md-2 no-border ">
+                        <div class="card card-body no-border psi_greenie shadow-lg">
+        
+                             <p class="card-subtitle mb-2 card__head text-light">Total Desktops & Laptops</p>
+                            <p style="font-weight:1000;" class="header__intro text-light"> {{equipObj1}} </p>
+                            <p class="card-subtitle mb-2 card__head text-light">Total Faulty</p>
+                            <p style="font-weight:1000;" class="header__intro text-light"> {{Total_Faulty}} </p>
+                            <p class="card-subtitle mb-2 card__head text-light">Above 5 Years</p>
+                            <p style="font-weight:1000;" class="header__intro text-light"> {{equipObj2}} </p>
+                            <!-- <p class="card-subtitle mb-2 card__head">Above 5 Years(inc. Faulty)</p>
+                            <p style="font-weight:1000;" class="header__intro"> {{Total_Faulty_Above_Five}} </p> -->
+                        </div>
+                    </div>
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border shadow-lg">
+
+                    <p class="card-subtitle mb-2 card__head">Desktops</p>
+                    <p style="font-weight:1000;" class="header__intro"> {{ Desktops|intcomma }}</p>
+
+                    <p class="card-subtitle mb-2 card__head">Faulty Desktops</p>
+                    <p style="font-weight:1000;" class="header__intro"> {{ Unusable_Desktops|intcomma }}</p>
+                    <p class="card-subtitle mb-2 card__head">Above 5 years</p>
+                    <p style="font-weight:1000;" class="header__intro"> {{ Desktops_Above|intcomma }}</p>
+                    <!-- <p class="card-subtitle mb-2 card__head">Above 5 Years(inc. Faulty)</p>
+                            <p style="font-weight:1000;" class="header__intro"> {{Total_Faulty_Above_Five_Desktops}} </p> -->
+                </div>
+            </div>
+            <div class="col-md-2 no-border">
+                <div class="card card-body psi_greenie shadow-lg">
+
+                    <p class="card-subtitle mb-2 card__head text-light">Laptops</p>
+                    <p style="font-weight:1000;" class="header__intro text-light"> {{ Laptops|intcomma }}</p>
+                     <p class="card-subtitle mb-2 card__head text-light" >Faulty Laptops</p>
+                    <p style="font-weight:1000;" class="header__intro text-light"> {{ Unusable_Laptops|intcomma }}</p>
+                    <p class="card-subtitle mb-2 card__head text-light">Above 5 years</p>
+                    <p style="font-weight:1000;" class="header__intro text-light"> {{ Laptops_Above|intcomma }}</p>
+                    <!-- <p class="card-subtitle mb-2 card__head">Above 5 Years(inc. Faulty)</p>
+                            <p style="font-weight:1000;" class="header__intro"> {{Total_Faulty_Above_Five_Laptops}} </p> -->
+
+                </div>
+            </div>
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border shadow-lg">
+                    <p class="card-subtitle mb-2 card__head ">Functional Devices</p>
+                    <p style="font-weight:1000;" class="header__intro">{{Functional}}</p>
+                    <p class="card-subtitle mb-2 card__head" >Active Staff (Including HCN & VIYA):</p>
+                    <p style="font-weight:1000;" class="header__intro"> {{ActiveStaff}}</p>
+                    <!-- <p class="card-subtitle mb-2 card__head" >Staff with at least one Device</p>
+                    <p style="font-weight:1000;" class="header__intro"> {{assignedDevices}}</p> -->
+                    <p class="card-subtitle mb-2 card__head" >Assigned to staff</p>
+                    <p style="font-weight:1000;" class="header__intro"> {{Assigned}}/{{Functional}}</p>
+
+                </div>
+            </div>
+            <div class="col-md-2 no-border">
+                <div class="card card-body no-border psi_greenie shadow-lg">
+
+                     <p class="card-subtitle mb-2 card__head text-light">Functional Devices</p>
+                    <p style="font-weight:1000;" class="header__intro text-light">{{Functional}}</p>
+                    <p class="card-subtitle mb-2 card__head text-light">Total Assigned</p>
+                    <p style="font-weight:1000;" class="header__intro text-light">{{Assigned}}</p>
+                    <p class="card-subtitle mb-2 card__head text-light">Assigned Above 5 years</p>
+                    <p style="font-weight:1000;" class="header__intro text-light">{{equipObj.count}}</p>
+
+                </div>
+            </div>
+                      
+                      <div class="col-md-2 no-border">
+                <div class="card card-body no-border shadow-lg">
+
+                     <p class="card-subtitle mb-2 card__head">Asset Gap</p>
+                    <p style="font-weight:1000;" class="header__intro">{{Gap}}</p>
+                    <p class="card-subtitle mb-2 card__head">Asset Due for Disposal</p>
+                    <p style="font-weight:1000;" class="header__intro">{{dueForDisposalCount}}</p>
+
+                </div>
+            </div>
+        </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col col-md-6 p-3">
+                <div class="card p-2">
+                    <div class="card no-border">
+                        {% comment %} <canvas class="canv2" id="myChart3" width="150" height="70"></canvas> {% endcomment %}
+                        <div class="card-body">
+                            <h5 class="card-title">Staff with more than one Device</h5>
+                        </div>
+                    </div>
+    <!--                <button type="button" class="btn btn-primary btn-md" id="changebtn2" onclick="Changethis()">Show as Table</button>-->
+                </div>
+            </div>
+                <div class="card col-md-6 border-0 bg-light">
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">Faulty Laptops less than 3 Years old</h5>
+                        <table class="table table-md table-stripped">
+                            <thead>
+                                <th>Engraved Number</th>
+                                <th>Tag Number</th>
+                                <th>Date of Purchase</th>
+                                
+                                <th>Supplier</th>
+                            </thead>
+                            <tbody>
+                                {% for FaultyObject in defects %} 
+                                <tr>
+                                   
+                                    <td>{{FaultyObject.Ast_Tag_nbr}}</td>
+                                    <td>{{FaultyObject.AstNo}}</td>
+                                    <td>{{FaultyObject.PurchaseDate}}</td>
+                                    <!-- <td>{{todays_date|add:"25"}}</td> -->
+                                    <td>{{FaultyObject.Vendor}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+              </div>
+              <div class="row mt-3 p-2">
+              
+                <div class="card col col-md-6 border-0 bg-light">
+                    <div class="card-body">
+                       
+                                <h5 class="card-title">Users with Laptop's over 5 years</h5>
+                                <table class="table table-md table-stripped">
+                                    <thead>
+                                        <!-- <th>Engraved Number</th> -->
+                                        <th>Tag Number</th>
+                                        <th>Date of Purchase</th>
+                                        
+                                        <th>Supplier</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for FaultyObject in equipObj %} 
+                                        <tr>
+                                           
+                                            <!-- <td>{{FaultyObject.Ast_Tag_nbr}}</td> -->
+                                            <td>{{FaultyObject.Username}}</td>
+                                            <td>{{FaultyObject.Ast_Tag_nbr.PurchaseDate}}</td>
+                                            <!-- <td>{{todays_date|add:"25"}}</td> -->
+                                            <td>{{FaultyObject.Ast_Tag_nbr.Ast_Tag_nbr}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+        
+                                </table>
+                            </div>
+                        
+    <!--                <button type="button" class="btn btn-primary btn-md" id="changebtn2" onclick="Changethis()">Show as Table</button>-->
+                </div>
+                
+                <div class="card col-md-6 border-0">
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">Assets due for Disposal</h5>
+                        <table class="table table-md table-stripped">
+                            <thead>
+                                <th>Engraved Number</th>
+                                <th>Tag Number</th>
+                                <th>Date of Purchase</th>
+                                
+                                <th>Supplier</th>
+                            </thead>
+                            <tbody>
+                                {% for FaultyObject in dueForDisposal %} 
+                                <tr>
+                                   
+                                    <td>{{FaultyObject.Ast_Tag_nbr}}</td>
+                                    <td>{{FaultyObject.AstNo}}</td>
+                                    <td>{{FaultyObject.PurchaseDate}}</td>
+                                    <!-- <td>{{todays_date|add:"25"}}</td> -->
+                                    <td>{{FaultyObject.Vendor}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+              </div>
+            </div>
+<!--          Graph for Aging summary, Assets Below 3 years Below 5years but above 3 years 5 years and above count-->
+
+          </div>
+      </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+{% endblock %}
+{% block scripts %}
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<!--<script src="{% static 'js/analytics.js' %}"></script>-->
+
+<script>
+    $(function() {
+        $("#Username_id").autocomplete({
+            source: '{% url "getasset" %}'
+
+    });
+  } );
+</script>
+
+{% endblock scripts %}

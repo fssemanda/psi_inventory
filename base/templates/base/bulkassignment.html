@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Bulk Assign Devices</li>
+          </ol>
+        </nav>
+    </div>
+    
+</div>
+
+<div class="row">
+    <p>
+        <div class="card">
+            
+            {% include 'base/validationmessages.html' %}
+        </div>
+    </p>
+</div>
+
+<div class="container-fluid">
+    <div class="row justify-content-center mt-3">
+    <div class="card col-md-4 justify-content-center mt-3">
+        <div class=" card-body ">
+            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                                        {{form}}
+    
+                    
+                            <div class="d-flex justify-content-center mt-3 login_container">
+                                <input type="submit" class="btn btn-success btn-sm" name="Confirm" value="Assign List"> </input>&nbsp;<a class="btn btn-danger btn-sm" href="{% url 'homepage' %}">Cancel</a>
+                           </div>
+                    </div>
+                </form>
+
+        </div>
+        
+            
+        </div>
+       
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="container-fluid px-4">
+
+<div class="row">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage'  %}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Auction Assets</li>
+          </ol>
+        </nav>
+    </div>
+    
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body p-3 m-3">
+            <h4 class="card-title mt-3">For your Approval</h4>
+            <h6 class="card-subtitle mt-3">The list below contains assets added by the Finance department due for auction</h6>
+            {% include 'base/validationmessages.html' %}
+        </div>
+    </div>
+</div>
+ <div class="row mt-3 p-3">       
+    <div class="col col-md-10">
+        <div class="card shadow-md border-0">
+        <table id="box" class="table table table-responsive">
+            <thead class="thead">
+                <tr>
+                    <th scope="row">Asset Number</th>
+                    
+                    <th scope="row">Model Number</th>
+                    <th scope="row">Type</th>
+                    
+                    <th scope="row">Donor Project</th>
+                    
+                    <th scope="row">Cost (UGX)</th>
+                    <th scope="row">Cost (USD)</th>
+                    <th scope="row">Purchase Date</th>
+                    <th scope="row">Fair Market Value</th>
+                    {% comment %} <th scope="row">Disposal Procedure</th> {% endcomment %}
+                    {% comment %} <th scope="row">Disposal Income</th> {% endcomment %}
+                    
+                    {% comment %} <th scope="row">Date of Disposal</th> {% endcomment %}
+                    <th scope="row">Disposal Explanation</th>
+                    {% comment %} <th scope="row">Comments</th> {% endcomment %}
+                    {% comment %} <th scope="row">Other Attachments</th> {% endcomment %}
+                    <th scope="row">CR Approval Status</th>
+
+
+                    
+                    <th scope="row" colspan="3">Actions</th>
+                   <!-- crApprovalObjects<th scope="row">Delete</th> -->
+                </tr>
+            </thead>
+            {% for item in ApprovalObjects %}
+                <tr>
+
+                    <td><a href="{% url 'crapproval' item.Ast_Tag_nbr %}">{{item.Ast_Tag_nbr}}</a></td>
+                   
+                    <td>{{item.Ast_Tag_nbr.Model_No}}</td>
+                    <td>{{item.Ast_Tag_nbr.Asset_Type}}</td>
+                    <td>{{item.Ast_Tag_nbr.Project_Name}}</td>
+                    <td>{{item.Ast_Tag_nbr.Item_Cost_UGX|floatformat:2|intcomma}}</td>
+                    <td>{{item.Ast_Tag_nbr.Item_Cost_USD|floatformat:2|intcomma}}</td>
+                    <td>{{item.Ast_Tag_nbr.PurchaseDate}}</td>
+                    <td>{{item.Ast_Tag_nbr.fairMarketValue}}</td>
+                   
+                    {% comment %} <td>{{item.disposalProcedure}}</td> {% endcomment %}
+                    {% comment %} <td>{{item.disposalIncome}}</td> {% endcomment %}
+                    {% comment %} <td>{{item.disposalDate}}</td> {% endcomment %}
+                    <td>{{item.disposalExplanation}}</td>
+                   
+                    {% comment %} <td>{{item.comments}}</td> {% endcomment %}
+                    {% comment %} <td><a href="{{item.attachment.url}}" download>{{item.attachment.name}}</a></td> {% endcomment %}
+                    <td>{{item.CR_Approval}}</td>
+                    <td><a href="{% url 'crapproval' item.Ast_Tag_nbr %}" class="btn btn-sm btn-primary">Approve</a></td>
+                    <td><a href="{% url 'cr-rejection' item.Ast_Tag_nbr %}" class="btn btn-sm btn-secondary">Reject</a></td>
+
+                    
+                    
+                    
+                   
+                    
+                    
+
+                    <!-- <td><a class="btn-danger btn-sm" href="{% url 'remove' item.Ast_Tag_nbr %}">Remove</a></td> -->
+
+
+
+
+                </tr>
+                  {% endfor %}
+        </table>
+    </div>
+</div>
+    <div class="col col-md-2 p-3 shadow-md border-0">
+        <div class="card shadow-md border-0">
+        <div class="card-body">
+            <h6 class="card-title mt-3">Instructions</h6>
+            <p class="card-subtitle">The items listed here are for your approval to be added on the "Approved Assets For Disposal list</p>
+            <p class="p-3 m-2 text-primary">To Approve
+                <p>
+                    <ol class="p-3">
+                        <li>Click on either of the Action buttons</li>
+                        <li>On the next page enter comments to support your desired action</li>
+                        <li>Click save</li>
+                        
+                    </ol>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock %}

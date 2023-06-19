@@ -1,0 +1,91 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="view-point" content="width=device-width, initial-scale=1.0">
+
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+<!--    <link rel="stylesheet" href="http://3.138.139.98/mystyle.css">-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+
+    <title>Assets</title>
+</head>
+<body id="body-pd">
+
+<div class="l-navbar" id="navbar">
+    <nav class="navx">
+        <div>
+            <img src="{% static 'img/psiug_web.png' %}" class="nav__brand">
+            <div class="navx__brand">
+
+                <ion-icon name="menu-outline" class="navx__toggle" id="nav-toggle"></ion-icon>
+                <a href="#" class="navx__logo">Asset Manager</a>
+            </div>
+            <div class="navx-list">
+                <a href="{% url 'homepage' %}" class="navx__link mactive">
+                    <ion-icon name="home-outline" class="navx__icon"></ion-icon>
+                    <span class="navx__name">Dashboard</span>
+                </a>
+                {% if request.user.staff.staffrole == "Financial Accounts Manager" or request.user.staff.staffrole == "Director of Finance and Administration" or request.user.staff.staffrole == "Asset Manager" or request.user.staff.staffrole == "Accountant-AP" or request.user.staff.staffrole == "Assistant Accountant-Treasury" %}
+                <div class="navx__link collapsex">
+
+                    <ion-icon name="stats-chart-outline" class="navx__icon"></ion-icon>
+                    <span class="navx__name">Reports</span>
+                    <ion-icon name="chevron-down-outline" class="collapsex__link"></ion-icon>
+                        <ul class="collapsex__menu">
+                            
+                            <a href="{% url 'reports_all' %}" class="collapsex__sublink">All Assets</a>
+                            <a href="{% url 'reports' %}" class="collapsex__sublink subActive">IT Assets</a>
+                            
+                        </ul>
+
+                </div>
+                {% endif %}
+
+<a href="#" class="navx__link">
+            <ion-icon name="person-circle-outline" class="navx__icon"></ion-icon>
+            <span class="navx__name">{{request.user.first_name}} &nbsp {{request.user.last_name}}</span>
+        </a>
+
+        <a href="{% url 'logout' %}" class="navx__link">
+            <ion-icon name="log-out-outline" class="navx__icon"></ion-icon>
+            <span class="navx__name">Log Out</span>
+        </a>
+    </nav>
+</div>
+<div class="container-fluid lines">
+
+    {% block content %}
+
+    {% endblock %}
+</div>
+
+
+<script src="{% static 'js/main.js' %}"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+<!--<script src="https://inventory.psiug.org/main.js"></script>-->
+
+<!--<script src="http://3.138.139.98/main.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+{% comment %} <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> {% endcomment %}
+{% comment %} <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script> {% endcomment %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"></script>
+{% block scripts %}
+
+{% endblock scripts %}
+</body>
+</html>

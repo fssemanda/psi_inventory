@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+{% include 'base/searchNav.html' %}
+
+<div class="container lines">
+    <h4>
+        Add Disposal Details
+    </h4>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% include 'base/validationmessages.html' %}
+
+            {% csrf_token %}
+            <div class='form-row'>
+                <div class="form-group col-md-2">
+                    <label for="">Asset</label>
+                    {{form.Ast_Tag_nbr}}
+                </div>
+                
+            </div>
+            <div class='form-row'>
+            <div class="form-group col-md-2">
+                <label for="">Disposal Explanation </label>
+                {{form.disposalExplanation}}
+             </div>
+            <div class="form-group col-md-2">
+                <label for="">Fair Market Value</label>
+                {% comment %} {{form.fairMarketValue}} {% endcomment %}
+                <input class="form-control " type="number"  value="{{depreciation}}" name="fairMarketValue">
+             </div>
+           
+             
+            {% comment %} <div class="form-group col-md-2">
+                <label for="">Attachment (Invoices, Receipts, Memo's)</label>
+                {{form.attachment}}
+             </div> {% endcomment %}
+             </div>
+            
+             <div class='form-row'>
+                <input type="submit" value="Save" class="btn btn-default btn-primary">
+    </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+
+
+</script>
+
+{% endblock %}
